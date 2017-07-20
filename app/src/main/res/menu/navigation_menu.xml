@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_kort"
+        android:icon="@drawable/map_black"
+        android:title="@string/navStr_map" />
+
+    <item android:title="Bruger">
+        <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/login"
+                android:title="@string/navStr_login" />
+
+            <item
+                android:id="@+id/nav_register"
+                android:icon="@drawable/register_icon"
+                android:title="@string/navStr_register" />
+        </menu>
+    </item>
+
+</menu>

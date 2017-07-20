@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RoadFarmer</string>
+    <string name="facebook_app_id">139877583262667</string>
+
+    <string name="title_activity_maps">Kort</string>
+
+    <string name="openStr">Open</string>
+    <string name="closeStr">Close</string>
+
+    <string name="navStr_map">Kort</string>
+    <string name="navStr_login">Log ind</string>
+    <string name="navStr_register">Registrer</string>
+
+    <string name="login_emailHint">Email Adresse</string>
+    <string name="login_passHint">Kode</string>
+    <string name="login_passForgotText">Glemt din kode?\nKlik her</string>
+
+    <string name="register_emailHint">Email Adresse</string>
+    <string name="register_emailRepeat">Gentag Email</string>
+    <string name="register_passHint">Kode</string>
+    <string name="register_passRepeat">Gentag Kode</string>
+    <string name="register_btnTxt">Registrer</string>
+
+
+
+
+    <string-array name="listSettingSelection">
+        <item>Vælg en</item>
+        <item>Hjælp</item>
+        <item>Indstillinger</item>
+        <item>Om</item>
+        <item>Log ud</item>
+    </string-array>
+
+    <string-array name="listLanguages">
+        <item>DA</item>
+        <item>EN</item>
+        <item>NO</item>
+        <item>SV</item>
+        <item>NL</item>
+    </string-array>
+
+</resources>

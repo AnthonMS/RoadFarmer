@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "823404253780",
+    "firebase_url": "https://roadfarmer-2cecf.firebaseio.com",
+    "project_id": "roadfarmer-2cecf",
+    "storage_bucket": "roadfarmer-2cecf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823404253780:android:5ab5fe21548521d0",
+        "android_client_info": {
+          "package_name": "dk.roadfarmer.roadfarmer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823404253780-j785v1durh4u7fra530nhlkq6tevmcau.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCN2E3GcXHE2gFEltFegOToY088KybnoM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

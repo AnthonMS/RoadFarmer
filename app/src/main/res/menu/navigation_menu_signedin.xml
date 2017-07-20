@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_kort2"
+        android:icon="@drawable/map_black"
+        android:title="Kort" />
+
+    <item android:title="Bruger">
+        <menu>
+            <item
+                android:id="@+id/nav_account"
+                android:icon="@drawable/login"
+                android:title="Bruger" />
+
+            <item
+                android:id="@+id/nav_create"
+                android:icon="@drawable/register_icon"
+                android:title="Opret placering" />
+
+            <item
+                android:id="@+id/nav_change"
+                android:icon="@drawable/register_icon"
+                android:title="Ændre placering" />
+
+            <item
+                android:id="@+id/nav_signout"
+                android:icon="@drawable/register_icon"
+                android:title="Log ud" />
+        </menu>
+    </item>
+
+</menu>

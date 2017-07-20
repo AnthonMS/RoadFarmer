@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">RoadFarmer</string>
+    <string name="facebook_app_id">139877583262667</string>
+
+    <string name="title_activity_maps">Map</string>
+
+    <string name="openStr">Open</string>
+    <string name="closeStr">Close</string>
+
+    <string name="navStr_map">Map</string>
+    <string name="navStr_login">Login</string>
+    <string name="navStr_register">Register</string>
+
+    <string name="login_emailHint">Email Address</string>
+    <string name="login_passHint">Password</string>
+    <string name="login_passForgotText">Forgotten your password?\nClick here</string>
+
+    <string name="register_emailHint">Email Address</string>
+    <string name="register_emailRepeat">Repeat Email</string>
+    <string name="register_passHint">Password</string>
+    <string name="register_passRepeat">Repeat Password</string>
+    <string name="register_btnTxt">Register</string>
+
+
+
+
+    <string-array name="listSettingSelection">
+        <item>Choose one</item>
+        <item>Help</item>
+        <item>Settings</item>
+        <item>About</item>
+        <item>Sign out</item>
+    </string-array>
+
+    <string-array name="listLanguages">
+        <item>EN</item>
+        <item>DA</item>
+        <item>NO</item>
+        <item>SV</item>
+        <item>NL</item>
+    </string-array>
+
+
+</resources>
