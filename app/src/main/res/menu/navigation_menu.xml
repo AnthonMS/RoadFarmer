@@ -6,8 +6,9 @@
         android:icon="@drawable/map_black"
         android:title="@string/navStr_map" />
 
-    <item android:title="Bruger">
+    <item android:title="@string/nav_userTitle">
         <menu>
+            <group android:id="@+id/nav_userGroup">
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/login"
@@ -17,6 +18,7 @@
                 android:id="@+id/nav_register"
                 android:icon="@drawable/register_icon"
                 android:title="@string/navStr_register" />
+            </group>
         </menu>
     </item>
 

@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -78,6 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView textViewTitleBar;
     // Close button from NavigationBar
     private ImageButton closeNavBtn;
+    private NavigationView navigationView;
 
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
@@ -100,11 +102,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (firebaseAuth.getCurrentUser() != null)
         {
-            toastMessage("current user != null");
+            //toastMessage("current user != null");
         }
         else
         {
-            toastMessage("current user == null");
+            //toastMessage("current user == null");
         }
 
 
@@ -121,8 +123,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         textViewTitleBar.setText(title);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.maps_drawerLayout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.maps_nav_view);
+        navigationView = (NavigationView) findViewById(R.id.maps_navView);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.navigation_menu_two);
+
+        //navigationView.getMenu().add(R.id.nav_userGroup, Menu.NONE, 0, "Change created location").setIcon(R.drawable.change_icon);
+
         closeNavBtn = (ImageButton) findViewById(R.id.closeNavBar);
         closeNavBtn.setOnClickListener(buttonClickListener);
     }
@@ -132,6 +140,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null)
+        {
+            //navigationView.getMenu().clear();
+            //navigationView.inflateMenu(R.menu.navigation_menu_signedin);
+            toastMessage("SIGNED IN!");
+        }
+        else
+        {
+            toastMessage("NOT SIGNED IN!");
+        }
     }
 
     @Override
@@ -347,20 +365,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        int id = item.getItemId();
-
-        if (item.getItemId() == R.id.nav_kort) {
-            toastMessage("Map is already showing");
-        }
-        else if (id == R.id.nav_login) {
-            //toastMessage("Trying to open settings");
-            startActivity(new Intent(MapsActivity.this, LoginAcitivity.class));
-            finish();
-
-        } else if (id == R.id.nav_register) {
-            //toastMessage("Trying to logout");
-            startActivity(new Intent(MapsActivity.this, RegisterActivity.class));
-            finish();
+        switch (item.getItemId())
+        {
+            case R.id.nav_kort:
+                toastMessage("Map is already showing..");
+                break;
+            case R.id.nav_login:
+                startActivity(new Intent(MapsActivity.this, LoginAcitivity.class));
+                finish();
+                break;
+            case R.id.nav_register:
+                startActivity(new Intent(MapsActivity.this, RegisterActivity.class));
+                finish();
+                break;
+            case R.id.nav_kort3:
+                toastMessage("Map is already showing");
+                break;
+            case R.id.nav_account2:
+                toastMessage("Trying to manage account");
+                break;
+            case R.id.nav_create2:
+                toastMessage("Trying to create location");
+                break;
+            case R.id.nav_change2:
+                toastMessage("Trying to change location");
+                break;
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_kort3"
+        android:icon="@drawable/map_black"
+        android:title="@string/navStr_map" />
+
+    <item android:title="@string/nav_userTitle">
+        <menu>
+            <group android:id="@+id/nav_userGroup3">
+
+                <item
+                    android:id="@+id/nav_account2"
+                    android:icon="@drawable/account_icon_circle"
+                    android:title="@string/navStr_user" />
+
+                <item
+                    android:id="@+id/nav_create2"
+                    android:icon="@drawable/create_icon"
+                    android:title="@string/navStr_create" />
+
+                <item
+                    android:id="@+id/nav_change2"
+                    android:icon="@drawable/change_icon"
+                    android:title="@string/navStr_change" />
+
+
+
+            </group>
+        </menu>
+    </item>
+</menu>

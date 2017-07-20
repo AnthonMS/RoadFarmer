@@ -80,7 +80,7 @@ public class LoginAcitivity extends AppCompatActivity implements
     private LoginButton facebookLoginBtn;
     private CallbackManager callbackManager;
 
-    List<User> userList;
+    //List<User> userList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class LoginAcitivity extends AppCompatActivity implements
         registerText.setOnClickListener(buttonClickListener);
         editEmail = (EditText) findViewById(R.id.editEmail);
         editPass = (EditText) findViewById(R.id.editPassword);
-        userList = new ArrayList<>();
+        //userList = new ArrayList<>();
 
         progressDialog = new ProgressDialog(this);
 

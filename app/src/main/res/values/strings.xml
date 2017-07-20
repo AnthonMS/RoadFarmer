@@ -10,6 +10,11 @@
     <string name="navStr_map">Map</string>
     <string name="navStr_login">Login</string>
     <string name="navStr_register">Register</string>
+    <string name="nav_userTitle">User</string>
+    <string name="navStr_user">My User</string>
+    <string name="navStr_create">Create Selling Location</string>
+    <string name="navStr_change">Change created location</string>
+    <string name="navStr_singout">Sign out</string>
 
     <string name="login_emailHint">Email Address</string>
     <string name="login_passHint">Password</string>

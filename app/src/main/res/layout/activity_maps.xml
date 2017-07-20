@@ -27,7 +27,7 @@
     </LinearLayout>
 
         <android.support.design.widget.NavigationView
-            android:id="@+id/maps_nav_view"
+            android:id="@+id/maps_navView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

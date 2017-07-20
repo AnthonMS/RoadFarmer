@@ -12,6 +12,11 @@
     <string name="navStr_map">Kort</string>
     <string name="navStr_login">Log ind</string>
     <string name="navStr_register">Registrer</string>
+    <string name="nav_userTitle">User</string>
+    <string name="navStr_user">Min bruger</string>
+    <string name="navStr_create">Opret sælger placering</string>
+    <string name="navStr_change">Ændrer oprettet placering</string>
+    <string name="navStr_singout">Log ud</string>
 
     <string name="login_emailHint">Email Adresse</string>
     <string name="login_passHint">Kode</string>

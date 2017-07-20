@@ -4,29 +4,29 @@
     <item
         android:id="@+id/nav_kort2"
         android:icon="@drawable/map_black"
-        android:title="Kort" />
+        android:title="@string/navStr_map" />
 
-    <item android:title="Bruger">
+    <item android:title="@string/nav_userTitle">
         <menu>
             <item
                 android:id="@+id/nav_account"
-                android:icon="@drawable/login"
-                android:title="Bruger" />
+                android:icon="@drawable/account_icon_circle"
+                android:title="@string/navStr_user" />
 
             <item
                 android:id="@+id/nav_create"
-                android:icon="@drawable/register_icon"
-                android:title="Opret placering" />
+                android:icon="@drawable/create_icon"
+                android:title="@string/navStr_create" />
 
             <item
                 android:id="@+id/nav_change"
-                android:icon="@drawable/register_icon"
-                android:title="Ændre placering" />
+                android:icon="@drawable/change_icon"
+                android:title="@string/navStr_change" />
 
             <item
                 android:id="@+id/nav_signout"
-                android:icon="@drawable/register_icon"
-                android:title="Log ud" />
+                android:icon="@drawable/logout_icon"
+                android:title="@string/navStr_singout" />
         </menu>
     </item>
 
