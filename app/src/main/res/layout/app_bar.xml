@@ -46,11 +46,12 @@
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/spinner_languageSelect"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/spinner_helpDropDown"
+            android:background="@drawable/flag_icon"
             android:entries="@array/listLanguages">
         </android.support.v7.widget.AppCompatSpinner>
 

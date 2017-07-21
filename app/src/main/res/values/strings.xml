@@ -2,6 +2,8 @@
     <string name="app_name">RoadFarmer</string>
     <string name="facebook_app_id">139877583262667</string>
 
+    <string name="saved_language_selection">EN</string>
+
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_register">Register</string>
@@ -63,6 +65,7 @@
     </string-array>
 
     <string-array name="listLanguages">
+        <item>Languages</item>
         <item>EN</item>
         <item>DA</item>
         <item>NO</item>

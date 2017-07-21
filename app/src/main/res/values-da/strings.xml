@@ -66,8 +66,9 @@
     </string-array>
 
     <string-array name="listLanguages">
-        <item>DA</item>
+        <item>Sprog</item>
         <item>EN</item>
+        <item>DA</item>
         <item>NO</item>
         <item>SV</item>
         <item>NL</item>

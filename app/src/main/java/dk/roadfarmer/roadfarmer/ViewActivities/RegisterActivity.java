@@ -1,7 +1,10 @@
 package dk.roadfarmer.roadfarmer.ViewActivities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Locale;
+
 import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
@@ -45,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity implements
     private TextView textViewTitleBar;
     // Close button from NavigationBar
     private ImageButton closeNavBtn;
+    private String chosenLanguage;
 
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
@@ -61,6 +67,12 @@ public class RegisterActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Intent intent = getIntent();
+        //chosenLanguage = intent.getExtras().getString("selectedLanguage");
+        SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
+        chosenLanguage = sharedPref.getString("currentLanguage", "");
+        //toastMessage(testString);
+
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRootRef = mFirebaseDatabase.getReference();
@@ -74,8 +86,16 @@ public class RegisterActivity extends AppCompatActivity implements
         adapterHelp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHelp.setAdapter(adapterHelp);
         spinnerHelp.setOnItemSelectedListener(dropDownListener);
+        spinnerLang = (Spinner) findViewById(R.id.spinner_languageSelect);
+        adapterLang = ArrayAdapter.createFromResource(this, R.array.listLanguages, android.R.layout.simple_spinner_item);
+        adapterLang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLang.setAdapter(adapterLang);
+        spinnerLang.setOnItemSelectedListener(languageListener);
         // Setting the title of this specific page.
         textViewTitleBar.setText(getString(R.string.title_activity_register));
+        // Setting the selected language in the spinner if user selected on himself
+        int pos = adapterLang.getPosition(chosenLanguage);
+        spinnerLang.setSelection(pos);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.register_drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.register_nav_view);
@@ -201,6 +221,72 @@ public class RegisterActivity extends AppCompatActivity implements
         return false;
     }
 
+    private AdapterView.OnItemSelectedListener languageListener = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            String str = parent.getItemAtPosition(position).toString();
+            switch (str)
+            {
+                case "NO":
+                    //toastMessage("NO valgt");
+                    chosenLanguage = "NO";
+                    break;
+                case "DA":
+                    //toastMessage("DA valgt");
+                    Locale mLocale = new Locale("da");
+                    Locale.setDefault(mLocale);
+                    Configuration config = getBaseContext().getResources().getConfiguration();
+                    if (!config.locale.equals(mLocale))
+                    {
+                        config.locale = mLocale;
+                        getBaseContext().getResources().updateConfiguration(config, null);
+                        recreate();
+                    }
+                    chosenLanguage = "DA";
+                    spinnerLang.setBackgroundResource(R.drawable.dk_flag_icon);
+
+                    SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("currentLanguage", chosenLanguage).apply();
+
+                    break;
+                case "NL":
+                    //toastMessage("NL valgt");
+                    chosenLanguage = "NL";
+                    break;
+                case "SV":
+                    //toastMessage("SV valgt");
+                    chosenLanguage = "SV";
+                    break;
+                case "EN":
+                    //toastMessage("EN valgt");
+                    Locale mLocale2 = new Locale("default");
+                    Locale.setDefault(mLocale2);
+                    Configuration config2 = getBaseContext().getResources().getConfiguration();
+                    if (!config2.locale.equals(mLocale2))
+                    {
+                        config2.locale = mLocale2;
+                        getBaseContext().getResources().updateConfiguration(config2, null);
+                        recreate();
+                    }
+                    chosenLanguage = "EN";
+                    spinnerLang.setBackgroundResource(R.drawable.uk_flag_icon);
+
+                    SharedPreferences sharedPref2 = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
+
+                    SharedPreferences.Editor editor2 = sharedPref2.edit();
+                    editor2.putString("currentLanguage", chosenLanguage).apply();
+                    break;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
+
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
     {
@@ -210,7 +296,7 @@ public class RegisterActivity extends AppCompatActivity implements
             switch (position)
             {
                 case 0:
-                    toastMessage("Vælg en!");
+                    //toastMessage("Vælg en!");
                     break;
                 case 1:
                     toastMessage("Hjælp");
@@ -253,11 +339,13 @@ public class RegisterActivity extends AppCompatActivity implements
         switch (item.getItemId())
         {
             case R.id.nav_kort:
-                startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
+                Intent intent = new Intent(RegisterActivity.this, MapsActivity.class);
+                startActivity(intent);
                 finish();
                 break;
             case R.id.nav_login:
-                startActivity(new Intent(RegisterActivity.this, LoginAcitivity.class));
+                Intent intent2 = new Intent(RegisterActivity.this, LoginAcitivity.class);
+                startActivity(intent2);
                 finish();
                 break;
             case R.id.nav_register:
