@@ -3,6 +3,20 @@
     <string name="facebook_app_id">139877583262667</string>
 
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_register">Register</string>
+    <string name="title_activity_account">My Account</string>
+    <string name="title_activity_change">Change info</string>
+    <string name="title_activity_create">Create location</string>
+
+    <string name="toast_loggedOut">You are now signed out</string>
+    <string name="toast_notLoggedIn">You were not signed in</string>
+    <string name="toast_loginSucces">Login successful</string>
+    <string name="toast_loginFail">Login Unsuccessful</string>
+    <string name="toast_mapShowing">Map is already showing</string>
+    <string name="toast_accountShowing">Account is already showing</string>
+    <string name="toast_registerShowing">Register is already showing</string>
+    <string name="toast_loginShowing">Login is already showing</string>
 
     <string name="openStr">Open</string>
     <string name="closeStr">Close</string>
@@ -25,6 +39,19 @@
     <string name="register_passHint">Password</string>
     <string name="register_passRepeat">Repeat Password</string>
     <string name="register_btnTxt">Register</string>
+
+    <string name="account_nameTxt">Name: </string>
+    <string name="account_phoneTxt">Phone: </string>
+    <string name="account_mailTxt">Email: </string>
+    <string name="account_sellingLocTxt">Show your selling location</string>
+
+    <string name="dialog_newValueHint">Enter new value</string>
+    <string name="dialog_changeBtnTxt">Change</string>
+    <string name="dialog_cancelBtnTxt">Cancel</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="dialog_noGoingBack">No going back!</string>
+    <string name="dialog_adding">Adding: </string>
 
 
     <string-array name="listSettingSelection">

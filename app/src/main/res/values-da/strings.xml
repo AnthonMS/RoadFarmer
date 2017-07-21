@@ -5,6 +5,20 @@
     <string name="facebook_app_id">139877583262667</string>
 
     <string name="title_activity_maps">Kort</string>
+    <string name="title_activity_login">Log ind</string>
+    <string name="title_activity_register">Registrer</string>
+    <string name="title_activity_account">Min bruger</string>
+    <string name="title_activity_change">Ændrer info</string>
+    <string name="title_activity_create">Opret placering</string>
+
+    <string name="toast_loggedOut">Du er nu logget ud</string>
+    <string name="toast_notLoggedIn">Du var ikke logget ind</string>
+    <string name="toast_loginSucces">Login successfuld</string>
+    <string name="toast_loginFail">Login IKKE successfuld</string>
+    <string name="toast_mapShowing">Kortet vises allerede</string>
+    <string name="toast_accountShowing">Din bruger vises allerede</string>
+    <string name="toast_registerShowing">Du er ved at registrerer</string>
+    <string name="toast_loginShowing">Du er ved at logge ind</string>
 
     <string name="openStr">Open</string>
     <string name="closeStr">Close</string>
@@ -28,6 +42,18 @@
     <string name="register_passRepeat">Gentag Kode</string>
     <string name="register_btnTxt">Registrer</string>
 
+    <string name="account_nameTxt">Navn: </string>
+    <string name="account_phoneTxt">Tlf.: </string>
+    <string name="account_mailTxt">Mail: </string>
+    <string name="account_sellingLocTxt">Hvis din sælger placering</string>
+
+    <string name="dialog_newValueHint">Skriv ny værdi</string>
+    <string name="dialog_changeBtnTxt">Ændrer</string>
+    <string name="dialog_cancelBtnTxt">Anuller</string>
+    <string name="dialog_yes">Ja</string>
+    <string name="dialog_no">Nej</string>
+    <string name="dialog_noGoingBack">Ingen vej tilbage!</string>
+    <string name="dialog_adding">Tilføjer: </string>
 
 
 

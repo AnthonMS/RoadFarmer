@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/dialog_titleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:text="TITLE"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/dialog_editValue"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/dialog_titleView"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/dialog_newValueHint"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/dialog_changeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_changeBtnTxt"
+        android:layout_margin="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dialog_editValue" />
+
+    <Button
+        android:id="@+id/dialog_cancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_cancelBtnTxt"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/dialog_editValue" />
+
+</RelativeLayout>

@@ -17,11 +17,96 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/account_txtViewName2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/action_bar"
+            android:layout_toLeftOf="@+id/account_txtViewName"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:textSize="20dp"
+            android:textColor="@android:color/black"
+            android:text="@string/account_nameTxt"/>
+
+        <TextView
+            android:id="@+id/account_txtViewName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/action_bar"
             android:layout_centerHorizontal="true"
-            android:text="Change Selling Location!!!"/>
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="0dp"
+            android:clickable="true"
+            android:textSize="20dp"
+            android:textColor="@android:color/black"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/account_txtViewPhone2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/account_txtViewName"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/black"
+            android:text="@string/account_phoneTxt"/>
+
+        <TextView
+            android:id="@+id/account_txtViewPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/account_txtViewName"
+            android:layout_toRightOf="@+id/account_txtViewPhone2"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:textColor="@android:color/black"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/account_txtViewMail2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/account_txtViewPhone"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@android:color/black"
+            android:text="@string/account_mailTxt"/>
+
+        <TextView
+            android:id="@+id/account_txtViewMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/account_txtViewPhone"
+            android:layout_toRightOf="@+id/account_txtViewMail2"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:textColor="@android:color/black"
+            android:text=""/>
+
+        <TextView
+            android:id="@+id/account_txtViewSellingLoc"
+            android:layout_below="@+id/account_txtViewMail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:clickable="true"
+            android:textSize="17dp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:text="@string/account_sellingLocTxt"/>
+
 
 
     </RelativeLayout>
