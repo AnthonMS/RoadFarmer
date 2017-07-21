@@ -126,9 +126,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         navigationView = (NavigationView) findViewById(R.id.maps_navView);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.getMenu().clear();
-        navigationView.inflateMenu(R.menu.navigation_menu_two);
-
         //navigationView.getMenu().add(R.id.nav_userGroup, Menu.NONE, 0, "Change created location").setIcon(R.drawable.change_icon);
 
         closeNavBtn = (ImageButton) findViewById(R.id.closeNavBar);
@@ -145,6 +142,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //navigationView.getMenu().clear();
             //navigationView.inflateMenu(R.menu.navigation_menu_signedin);
             toastMessage("SIGNED IN!");
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_menu_two);
         }
         else
         {
@@ -338,6 +337,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     {
                         toastMessage("Du er nu logget ud");
                         firebaseAuth.signOut();
+                        navigationView.getMenu().clear();
+                        navigationView.inflateMenu(R.menu.navigation_menu);
                     }
                     else
                     {
