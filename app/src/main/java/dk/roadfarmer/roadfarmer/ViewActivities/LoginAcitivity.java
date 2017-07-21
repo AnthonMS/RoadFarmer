@@ -60,8 +60,6 @@ import dk.roadfarmer.roadfarmer.R;
 public class LoginAcitivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
-    private final String title = "Login";
-
     private DrawerLayout mDrawerLayout;
 
     // Buttons and stuff from app_bar class
@@ -108,7 +106,7 @@ public class LoginAcitivity extends AppCompatActivity implements
         spinnerHelp.setAdapter(adapterHelp);
         spinnerHelp.setOnItemSelectedListener(dropDownListener);
         // Setting the title of this specific page.
-        textViewTitleBar.setText(title);
+        textViewTitleBar.setText(getString(R.string.title_activity_login));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.login_drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.login_nav_view);
@@ -420,18 +418,19 @@ public class LoginAcitivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        int id = item.getItemId();
-
-        if (item.getItemId() == R.id.nav_kort) {
-            startActivity(new Intent(LoginAcitivity.this, MapsActivity.class));
-            finish();
-        }
-        else if (id == R.id.nav_login) {
-            //toastMessage("Already in login");
-
-        } else if (id == R.id.nav_register) {
-            startActivity(new Intent(LoginAcitivity.this, RegisterActivity.class));
-            finish();
+        switch (item.getItemId())
+        {
+            case R.id.nav_kort:
+                startActivity(new Intent(LoginAcitivity.this, MapsActivity.class));
+                finish();
+                break;
+            case R.id.nav_login:
+                toastMessage(getString(R.string.toast_loginShowing));
+                break;
+            case R.id.nav_register:
+                startActivity(new Intent(LoginAcitivity.this, RegisterActivity.class));
+                finish();
+                break;
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

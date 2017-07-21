@@ -35,8 +35,6 @@ import dk.roadfarmer.roadfarmer.R;
 public class RegisterActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
-    private final String title = "Register";
-
     private DrawerLayout mDrawerLayout;
 
     // Buttons and stuff from app_bar class
@@ -77,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity implements
         spinnerHelp.setAdapter(adapterHelp);
         spinnerHelp.setOnItemSelectedListener(dropDownListener);
         // Setting the title of this specific page.
-        textViewTitleBar.setText(title);
+        textViewTitleBar.setText(getString(R.string.title_activity_register));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.register_drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.register_nav_view);
@@ -252,18 +250,19 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        int id = item.getItemId();
-
-        if (item.getItemId() == R.id.nav_kort) {
-            startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
-            finish();
-        }
-        else if (id == R.id.nav_login) {
-            startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
-            finish();
-
-        } else if (id == R.id.nav_register) {
-            //toastMessage("Already in Register");
+        switch (item.getItemId())
+        {
+            case R.id.nav_kort:
+                startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
+                finish();
+                break;
+            case R.id.nav_login:
+                startActivity(new Intent(RegisterActivity.this, LoginAcitivity.class));
+                finish();
+                break;
+            case R.id.nav_register:
+                toastMessage(getString(R.string.toast_registerShowing));
+                break;
         }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);

@@ -1,18 +1,25 @@
 package dk.roadfarmer.roadfarmer.ViewActivities;
 
 import android.accounts.Account;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,16 +28,20 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
+import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
 public class AccountActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
-    private final String title = "Login";
-
     private DrawerLayout mDrawerLayout;
 
     // Buttons and stuff from app_bar class
@@ -47,6 +58,11 @@ public class AccountActivity extends AppCompatActivity implements
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRootRef;
+
+    // Initialize from layout file
+    private TextView textViewName, textViewPhone, textViewMail, textViewSellingLoc;
+    private User userModel;
+    private final Context context = this;
 
 
     @Override
@@ -69,7 +85,7 @@ public class AccountActivity extends AppCompatActivity implements
         spinnerHelp.setAdapter(adapterHelp);
         spinnerHelp.setOnItemSelectedListener(dropDownListener);
         // Setting the title of this specific page.
-        textViewTitleBar.setText(title);
+        textViewTitleBar.setText(getString(R.string.title_activity_account));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.account_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.account_nav_view);
@@ -77,6 +93,77 @@ public class AccountActivity extends AppCompatActivity implements
         closeNavBtn = (ImageButton) findViewById(R.id.account_closeNavBar);
         closeNavBtn.setOnClickListener(buttonClickListener);
 
+        textViewName = (TextView) findViewById(R.id.account_txtViewName);
+        textViewName.setOnClickListener(buttonClickListener);
+        textViewMail = (TextView) findViewById(R.id.account_txtViewMail);
+        textViewMail.setOnClickListener(buttonClickListener);
+        textViewPhone = (TextView) findViewById(R.id.account_txtViewPhone);
+        textViewPhone.setOnClickListener(buttonClickListener);
+        textViewSellingLoc = (TextView) findViewById(R.id.account_txtViewSellingLoc);
+        textViewSellingLoc.setOnClickListener(buttonClickListener);
+
+        getUserInfoFromFirebase();
+
+    }
+
+    private void getUserInfoFromFirebase()
+    {
+        //toastMessage("TestRoot " + firebaseAuth.getCurrentUser().getUid());
+        myRootRef.child("Users")
+                .child(firebaseAuth.getCurrentUser().getUid())
+                .child("UserInfo")
+                .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                User tempUser = dataSnapshot.getValue(User.class);
+                userModel = tempUser;
+                //toastMessage(tempUser.getEmail());
+
+                if (TextUtils.isEmpty(tempUser.getFullName()))
+                {
+                    // Name is empty
+                    textViewName.setText("NoName");
+                    textViewName.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                }
+                else
+                {
+                    // Name is not empty
+                    textViewName.setText(tempUser.getFullName());
+                    textViewName.setClickable(false);
+                }
+                if (TextUtils.isEmpty(tempUser.getEmail()))
+                {
+                    // Email is empty
+                    textViewMail.setText("NoMail");
+                    textViewMail.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                }
+                else
+                {
+                    // Email is not empty
+                    textViewMail.setText(tempUser.getEmail());
+                    textViewMail.setClickable(false);
+                }
+                if (TextUtils.isEmpty(tempUser.getPhone()))
+                {
+                    // phone is empty
+                    textViewPhone.setText("NoPhone");
+                    textViewPhone.setTextColor(ContextCompat.getColor(context, R.color.colorRed));
+                }
+                else
+                {
+                    // Phone is not empty
+                    textViewPhone.setText(tempUser.getPhone());
+                    textViewPhone.setClickable(false);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -92,9 +179,116 @@ public class AccountActivity extends AppCompatActivity implements
                 case R.id.account_closeNavBar:
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     break;
+                case R.id.account_txtViewName:
+                    toastMessage("Trying to change name");
+                    showCustomDialog("Add name", 0);
+                    break;
+                case R.id.account_txtViewMail:
+                    toastMessage("Trying to change mail");
+                    showCustomDialog("Add mail", 1);
+                    break;
+                case R.id.account_txtViewPhone:
+                    toastMessage("Trying to change phone no.");
+                    showCustomDialog("Add phone", 2);
+                    break;
+                case R.id.account_txtViewSellingLoc:
+                    toastMessage("Trying to go to ChangeSellingLocation");
+                    break;
             }
         }
     };
+
+    private void editMissingInfo(int i, String newValue)
+    {
+        switch (i)
+        {
+            case 0:
+                userModel.setFullName(newValue);
+                textViewName.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+                textViewName.setClickable(false);
+                break;
+            case 2:
+                userModel.setPhone(newValue);
+                textViewPhone.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+                textViewPhone.setClickable(false);
+                break;
+            case 1:
+                userModel.setEmail(newValue);
+                textViewMail.setTextColor(ContextCompat.getColor(context, R.color.colorBlack));
+                textViewMail.setClickable(false);
+                break;
+        }
+
+        myRootRef.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserInfo").setValue(userModel);
+    }
+
+    private void showCustomDialog(String title, int i)
+    {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_change_value);
+        dialog.setTitle(title);
+        dialog.setCanceledOnTouchOutside(false);
+
+        // Custom dialog components
+        TextView titleView = (TextView) dialog.findViewById(R.id.dialog_titleView);
+        titleView.setText(title);
+
+        final EditText dialog_editValue = (EditText) dialog.findViewById(R.id.dialog_editValue);
+        final int tempInt = i;
+
+        Button dialog_changeBtn = (Button) dialog.findViewById(R.id.dialog_changeBtn);
+        dialog_changeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                String tempStr = dialog_editValue.getText().toString().trim();
+
+                showYesNoDialog(getString(R.string.dialog_noGoingBack), getString(R.string.dialog_adding) + tempStr, tempInt, tempStr);
+                //editMissingInfo(tempInt, tempStr);
+            }
+        });
+
+        Button dialog_cancelBtn = (Button) dialog.findViewById(R.id.dialog_cancelBtn);
+        dialog_cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { dialog.dismiss(); }
+        });
+
+        dialog.show();
+    }
+
+    private void showYesNoDialog(String title, String body, final int tempInt, final String newValue)
+    {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_yes_no);
+        dialog.setTitle(title);
+        dialog.setCanceledOnTouchOutside(false);
+
+        // Custom dialog components
+        TextView titleView = (TextView) dialog.findViewById(R.id.dialog_titleView2);
+        titleView.setText(title);
+        TextView bodyView = (TextView) dialog.findViewById(R.id.dialog_bodyView2);
+        bodyView.setText(body);
+
+        Button yesBtn = (Button) dialog.findViewById(R.id.dialog_yesBtn);
+        Button noBtn = (Button) dialog.findViewById(R.id.dialog_noBtn);
+        yesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editMissingInfo(tempInt, newValue);
+                dialog.dismiss();
+            }
+        });
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
 
     // This is the drop down menu with Help, Settings and About page buttons ----------------------------------
     private AdapterView.OnItemSelectedListener dropDownListener = new AdapterView.OnItemSelectedListener()
@@ -161,16 +355,21 @@ public class AccountActivity extends AppCompatActivity implements
         switch (item.getItemId())
         {
             case R.id.nav_kort2:
-                toastMessage("Map is already showing");
+                startActivity(new Intent(AccountActivity.this, MapsActivity.class));
+                finish();
                 break;
             case R.id.nav_account2:
-                toastMessage("Trying to manage account");
+                toastMessage(getString(R.string.toast_accountShowing));
                 break;
             case R.id.nav_create2:
-                toastMessage("Trying to create location");
+                toastMessage("Trying to create Location");
+                //startActivity(new Intent(AccountActivity.this, CreateLocationActivity.class));
+                //finish();
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");
+                //startActivity(new Intent(AccountActivity.this, ChangeLocationActivity.class));
+                //finish();
                 break;
         }
 

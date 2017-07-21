@@ -60,9 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleMap.OnInfoWindowClickListener,
         NavigationView.OnNavigationItemSelectedListener
 {
-
-    private final String title = "Kort";
-
     private DrawerLayout mDrawerLayout;
 
     // Google Maps stuff
@@ -123,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         spinnerHelp.setAdapter(adapterHelp);
         spinnerHelp.setOnItemSelectedListener(dropDownListener);
         // Setting the title of this specific page.
-        textViewTitleBar.setText(title);
+        textViewTitleBar.setText(getString(R.string.title_activity_maps));
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.maps_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.maps_navView);
@@ -144,13 +141,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             //navigationView.getMenu().clear();
             //navigationView.inflateMenu(R.menu.navigation_menu_signedin);
-            toastMessage("SIGNED IN!");
+            //toastMessage("SIGNED IN!");
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.navigation_menu_two);
         }
         else
         {
-            toastMessage("NOT SIGNED IN!");
+            //toastMessage("NOT SIGNED IN!");
         }
     }
 
@@ -338,7 +335,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //toastMessage("Log ud");
                     if (firebaseAuth.getCurrentUser() != null)
                     {
-                        toastMessage("Du er nu logget ud");
+                        toastMessage(getString(R.string.toast_loggedOut));
                         firebaseAuth.signOut();
                         navigationView.getMenu().clear();
                         navigationView.inflateMenu(R.menu.navigation_menu);
@@ -347,7 +344,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     else
                     {
-                        toastMessage("Du er ikke logget ind");
+                        toastMessage(getString(R.string.toast_notLoggedIn));
                     }
                     break;
                 case 5:
@@ -374,7 +371,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         switch (item.getItemId())
         {
             case R.id.nav_kort:
-                toastMessage("Map is already showing..");
+                toastMessage(getString(R.string.toast_mapShowing));
                 break;
             case R.id.nav_login:
                 startActivity(new Intent(MapsActivity.this, LoginAcitivity.class));
@@ -385,7 +382,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 finish();
                 break;
             case R.id.nav_kort2:
-                toastMessage("Map is already showing");
+                toastMessage(getString(R.string.toast_mapShowing));
                 break;
             case R.id.nav_account2:
                 startActivity(new Intent(MapsActivity.this, AccountActivity.class));
@@ -403,6 +400,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return true;
     }
 
+    // Run this in the onCreate to get SHA1 key.
+    // then just open log after running and search for KeyHash
     private void getKeyHash()
     {
         try {
