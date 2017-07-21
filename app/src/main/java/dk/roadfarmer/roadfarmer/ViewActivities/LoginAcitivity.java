@@ -474,7 +474,21 @@ public class LoginAcitivity extends AppCompatActivity implements
                     toastMessage("Om");
                     break;
                 case 4:
-                    toastMessage("Log ud");
+                    //toastMessage("Log ud");
+                    if (firebaseAuth.getCurrentUser() != null)
+                    {
+                        toastMessage(getString(R.string.toast_loggedOut));
+                        firebaseAuth.signOut();
+                        // Logout of facebook - Doesn't seem to cause problems if not logged in to facebook.
+                        LoginManager.getInstance().logOut();
+                    }
+                    else
+                    {
+                        toastMessage(getString(R.string.toast_notLoggedIn));
+                    }
+
+                    startActivity(new Intent(LoginAcitivity.this, MapsActivity.class));
+                    finish();
                     break;
                 case 5:
                     break;

@@ -396,14 +396,14 @@ public class AccountActivity extends AppCompatActivity implements
                     //toastMessage("Log ud");
                     if (firebaseAuth.getCurrentUser() != null)
                     {
-                        toastMessage("Du er nu logget ud");
+                        toastMessage(getString(R.string.toast_loggedOut));
                         firebaseAuth.signOut();
                         // Logout of facebook - Doesn't seem to cause problems if not logged in to facebook.
                         LoginManager.getInstance().logOut();
                     }
                     else
                     {
-                        toastMessage("Du er ikke logget ind");
+                        toastMessage(getString(R.string.toast_notLoggedIn));
                     }
 
                     startActivity(new Intent(AccountActivity.this, MapsActivity.class));

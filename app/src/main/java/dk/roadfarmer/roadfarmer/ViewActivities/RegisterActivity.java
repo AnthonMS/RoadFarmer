@@ -24,6 +24,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -65,6 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_register);
 
         Intent intent = getIntent();
@@ -308,7 +311,21 @@ public class RegisterActivity extends AppCompatActivity implements
                     toastMessage("Om");
                     break;
                 case 4:
-                    toastMessage("Log ud");
+                    //toastMessage("Log ud");
+                    if (firebaseAuth.getCurrentUser() != null)
+                    {
+                        toastMessage(getString(R.string.toast_loggedOut));
+                        firebaseAuth.signOut();
+                        // Logout of facebook - Doesn't seem to cause problems if not logged in to facebook.
+                        LoginManager.getInstance().logOut();
+                    }
+                    else
+                    {
+                        toastMessage(getString(R.string.toast_notLoggedIn));
+                    }
+
+                    startActivity(new Intent(RegisterActivity.this, MapsActivity.class));
+                    finish();
                     break;
                 case 5:
                     break;
