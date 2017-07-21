@@ -170,10 +170,10 @@ public class RegisterActivity extends AppCompatActivity implements
     {
         User user = new User();
         user.setEmail(editEmail.getText().toString().trim());
-        String str = firebaseAuth.getInstance().getCurrentUser().getUid();
-        user.setUserID(str);
+        String tempID = firebaseAuth.getInstance().getCurrentUser().getUid();
+        user.setUserID(tempID);
 
-        myRootRef.child("FirebaseUsers").child(str).setValue(user);
+        myRootRef.child("Users").child(tempID).child("UserInfo").setValue(user);
     }
 
 

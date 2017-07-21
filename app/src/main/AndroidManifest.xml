@@ -32,9 +32,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".ViewActivities.MapsActivity"
@@ -48,7 +48,8 @@
         <activity android:name=".ViewActivities.LoginAcitivity" />
         <activity android:name=".ViewActivities.RegisterActivity" />
         <activity android:name=".ViewActivities.CreateLocationActivity" />
-        <activity android:name=".ViewActivities.ChangeLocationActivity"></activity>
+        <activity android:name=".ViewActivities.ChangeLocationActivity" />
+        <activity android:name=".ViewActivities.AccountActivity"></activity>
     </application>
 
 </manifest>

@@ -27,8 +27,6 @@
     <string name="register_btnTxt">Register</string>
 
 
-
-
     <string-array name="listSettingSelection">
         <item>Choose one</item>
         <item>Help</item>

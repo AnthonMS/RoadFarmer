@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/change_drawerLayout">
+    android:id="@+id/account_drawerLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,14 +12,14 @@
 
         <include
             layout="@layout/app_bar"
-            android:id="@+id/testID"
+            android:id="@+id/action_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/testID"
+            android:layout_below="@+id/action_bar"
             android:layout_centerHorizontal="true"
             android:text="Change Selling Location!!!"/>
 
@@ -27,13 +27,13 @@
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/change_nav_view"
+        android:id="@+id/account_nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/navigation_menu">
+        app:menu="@menu/navigation_menu_two">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/change_closeNavBar"
+                android:id="@+id/account_closeNavBar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="bottom"

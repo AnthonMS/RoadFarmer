@@ -29,6 +29,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -87,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_maps);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -339,6 +342,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         firebaseAuth.signOut();
                         navigationView.getMenu().clear();
                         navigationView.inflateMenu(R.menu.navigation_menu);
+                        // Logout of facebook - Doesn't seem to cause problems if not logged in to facebook.
+                        LoginManager.getInstance().logOut();
                     }
                     else
                     {
@@ -379,11 +384,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(new Intent(MapsActivity.this, RegisterActivity.class));
                 finish();
                 break;
-            case R.id.nav_kort3:
+            case R.id.nav_kort2:
                 toastMessage("Map is already showing");
                 break;
             case R.id.nav_account2:
-                toastMessage("Trying to manage account");
+                startActivity(new Intent(MapsActivity.this, AccountActivity.class));
+                finish();
                 break;
             case R.id.nav_create2:
                 toastMessage("Trying to create location");

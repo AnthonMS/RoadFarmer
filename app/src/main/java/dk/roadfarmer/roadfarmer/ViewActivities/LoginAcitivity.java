@@ -26,6 +26,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -37,14 +39,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,10 +130,13 @@ public class LoginAcitivity extends AppCompatActivity implements
 
         callbackManager = CallbackManager.Factory.create();
         facebookLoginBtn = (LoginButton) findViewById(R.id.facebookLoginBtn);
+        facebookLoginBtn.setReadPermissions("user_friends");
+        facebookLoginBtn.setReadPermissions("public_profile");
+        facebookLoginBtn.setReadPermissions("email");
+        facebookLoginBtn.setReadPermissions("user_birthday");
 
         loginWithFb();
     }
-
     private void loginWithFb()
     {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -135,6 +144,9 @@ public class LoginAcitivity extends AppCompatActivity implements
             public void onSuccess(LoginResult loginResult)
             {
                 //toastMessage("Successfully logged in with Fb\n" + loginResult.getAccessToken());
+
+                requestUserProfile(loginResult);
+
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
@@ -149,6 +161,58 @@ public class LoginAcitivity extends AppCompatActivity implements
                 toastMessage("Error: " + error.getMessage());
             }
         });
+    }
+
+    private String fbName, fbMail;
+    private void requestUserProfile(LoginResult loginResult)
+    {
+        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                // Get facebook data from login
+                Bundle bFacebookData = getFacebookData(object);
+                String fName = bFacebookData.getString("first_name");
+                String lName = bFacebookData.getString("last_name");
+                String eemail = bFacebookData.getString("email");
+                fbName = fName + " " + lName;
+                fbMail = eemail;
+
+                //toastMessage(fName + " " + lName + " " + eemail);
+            }
+        });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    private Bundle getFacebookData(JSONObject object)
+    {
+        Bundle bundle = new Bundle();
+        try {
+            String id = object.getString("id");
+
+            bundle.putString("idFacebook", id);
+            if (object.has("first_name"))
+                bundle.putString("first_name", object.getString("first_name"));
+            if (object.has("last_name"))
+                bundle.putString("last_name", object.getString("last_name"));
+            if (object.has("email"))
+                bundle.putString("email", object.getString("email"));
+            if (object.has("gender"))
+                bundle.putString("gender", object.getString("gender"));
+            if (object.has("birthday"))
+                bundle.putString("birthday", object.getString("birthday"));
+            if (object.has("location"))
+                bundle.putString("location", object.getJSONObject("location").getString("name"));
+
+        }
+        catch(JSONException e) {
+
+        }
+
+        return bundle;
     }
 
     @Override
@@ -191,49 +255,31 @@ public class LoginAcitivity extends AppCompatActivity implements
     {
         User user = new User();
         FirebaseUser fireUser = firebaseAuth.getInstance().getCurrentUser();
-        user.setEmail(fireUser.getEmail());
-        user.setFullName(fireUser.getDisplayName());
+
+        /*String providerID = "";
+        String providerName = "";
+        String providerEmail = "";
+
+        for (UserInfo profile : fireUser.getProviderData())
+        {
+            providerID = profile.getProviderId();
+            providerName = profile.getDisplayName();
+            providerEmail = profile.getEmail();
+
+        }*/
+        //toastLong("Profile: " + providerName + " " + providerEmail + " " + providerID);
+        //toastLong("User: " + fireUser.getDisplayName() + " " + fireUser.getEmail() + " " + fireUser.getUid());
+
+        user.setEmail(fbMail);
+        user.setFullName(fbName);
         user.setPhone(fireUser.getPhoneNumber());
         user.setUserID(fireUser.getUid());
 
-        myRootRef.child("FacebookUsers").child(fireUser.getUid()).setValue(user);
 
-        /*boolean checkUser = false;
-        for (User u : userList)
-        {
-            if (user.equals(u) == true)
-            {
-                // User already exist
-                checkUser = true;
-            }
-            else
-            {
-                // New facebook user signing in
 
-            }
-        }*/
+        myRootRef.child("Users").child(fireUser.getUid()).child("UserInfo").setValue(user);
+
     }
-
-    /*private void createUserList()
-    {
-        myRootRef.child("FacebookUsers").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    User user = ds.getValue(User.class);
-                    userList.add(user);
-                    toastMessage(user.getFullName());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     @Override
     protected void onPause() {
