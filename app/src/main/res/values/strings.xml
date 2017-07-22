@@ -19,6 +19,8 @@
     <string name="toast_accountShowing">Account is already showing</string>
     <string name="toast_registerShowing">Register is already showing</string>
     <string name="toast_loginShowing">Login is already showing</string>
+    <string name="toast_createShowing">You are already in the process</string>
+    <string name="toast_changeShowing">You are already in the process</string>
 
     <string name="openStr">Open</string>
     <string name="closeStr">Close</string>
@@ -80,6 +82,30 @@
         <item>NO</item>
         <item>SV</item>
         <item>NL</item>
+    </string-array>
+
+    <string-array name="listOverallCategory">
+        <item>Choose one</item>
+        <item>Berries</item>
+        <item>Fruits</item>
+        <item>Vegetables</item>
+        <item>Meat</item>
+    </string-array>
+
+    <string-array name="listSpecificFruits">
+        <item>Choose one</item>
+        <item>Apples</item>
+        <item>Pares</item>
+        <item>Plumes</item>
+        <item>Oranges</item>
+    </string-array>
+
+    <string-array name="listSpecificBerries">
+        <item>Choose one</item>
+        <item>Cherries</item>
+        <item>Blueberries</item>
+        <item>Raspberries</item>
+        <item>Strawberries</item>
     </string-array>
 
 

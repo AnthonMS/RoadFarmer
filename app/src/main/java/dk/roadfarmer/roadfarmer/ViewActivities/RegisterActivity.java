@@ -103,6 +103,7 @@ public class RegisterActivity extends AppCompatActivity implements
         mDrawerLayout = (DrawerLayout) findViewById(R.id.register_drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.register_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_register);
         closeNavBtn = (ImageButton) findViewById(R.id.closeNavBar3);
         closeNavBtn.setOnClickListener(buttonClickListener);
 

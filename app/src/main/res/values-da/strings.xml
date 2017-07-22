@@ -19,6 +19,8 @@
     <string name="toast_accountShowing">Din bruger vises allerede</string>
     <string name="toast_registerShowing">Du er ved at registrerer</string>
     <string name="toast_loginShowing">Du er ved at logge ind</string>
+    <string name="toast_createShowing">Du er ved at lave en</string>
+    <string name="toast_changeShowing">Du er ved at ændrer en</string>
 
     <string name="openStr">Open</string>
     <string name="closeStr">Close</string>

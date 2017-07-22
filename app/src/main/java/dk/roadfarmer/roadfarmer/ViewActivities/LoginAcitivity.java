@@ -130,6 +130,7 @@ public class LoginAcitivity extends AppCompatActivity implements
         mDrawerLayout = (DrawerLayout) findViewById(R.id.login_drawerLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.login_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_login);
         closeNavBtn = (ImageButton) findViewById(R.id.closeNavBar2);
         closeNavBtn.setOnClickListener(buttonClickListener);
 
@@ -287,12 +288,8 @@ public class LoginAcitivity extends AppCompatActivity implements
         //toastLong("Profile: " + providerName + " " + providerEmail + " " + providerID);
         //toastLong("User: " + fireUser.getDisplayName() + " " + fireUser.getEmail() + " " + fireUser.getUid());
 
-        user.setEmail(fbMail);
         user.setFullName(fbName);
-        user.setPhone(fireUser.getPhoneNumber());
         user.setUserID(fireUser.getUid());
-
-
 
         myRootRef.child("Users").child(fireUser.getUid()).child("UserInfo").setValue(user);
 

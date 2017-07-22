@@ -162,6 +162,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mDrawerLayout = (DrawerLayout) findViewById(R.id.maps_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.maps_navView);
         navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.getMenu().getItem(0).setChecked(true);
+        navigationView.setCheckedItem(R.id.nav_kort2);
 
         //navigationView.getMenu().add(R.id.nav_userGroup, Menu.NONE, 0, "Change created location").setIcon(R.drawable.change_icon);
 
@@ -181,6 +183,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             //toastMessage("SIGNED IN!");
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.navigation_menu_two);
+            //navigationView.getMenu().getItem(0).setChecked(true);
+            navigationView.setCheckedItem(R.id.nav_kort2);
         }
         else
         {
@@ -526,7 +530,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.nav_create2:
                 // Try and get the lastLocation in a string from Shared Preferences.
                 // If that doesn't work, try and send it with the intent.
-                toastMessage("Trying to create location");
+                //toastMessage("Trying to create location");
                 Intent intent4 = new Intent(MapsActivity.this, CreateLocationActivity.class);
                 startActivity(intent4);
                 finish();

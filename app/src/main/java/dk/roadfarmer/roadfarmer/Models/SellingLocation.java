@@ -10,13 +10,19 @@ public class SellingLocation
     private int no, zip;
     private String sellingItem;
     private String locationID;
+    private String overallCategory;
+    private String specificItem1;
+    private String specificItem2;
+    private String specificItem3;
+    private String specificItem4;
+    private String specificItem5;
 
     public SellingLocation()
     {
 
     }
 
-    public SellingLocation(String road, String city, int no, int zip, String sellingItem, String locationID) {
+    public SellingLocation(String road, String city, int no, int zip, String locationID) {
         this.road = road;
         this.city = city;
         this.no = no;
@@ -27,6 +33,54 @@ public class SellingLocation
 
     public void setLocationID(String locationID) {
         this.locationID = locationID;
+    }
+
+    public void setOverallCategory(String overallCategory) {
+        this.overallCategory = overallCategory;
+    }
+
+    public void setSpecificItem1(String specificItem1) {
+        this.specificItem1 = specificItem1;
+    }
+
+    public void setSpecificItem2(String specificItem2) {
+        this.specificItem2 = specificItem2;
+    }
+
+    public void setSpecificItem3(String specificItem3) {
+        this.specificItem3 = specificItem3;
+    }
+
+    public void setSpecificItem4(String specificItem4) {
+        this.specificItem4 = specificItem4;
+    }
+
+    public void setSpecificItem5(String specificItem5) {
+        this.specificItem5 = specificItem5;
+    }
+
+    public String getOverallCategory() {
+        return overallCategory;
+    }
+
+    public String getSpecificItem1() {
+        return specificItem1;
+    }
+
+    public String getSpecificItem2() {
+        return specificItem2;
+    }
+
+    public String getSpecificItem3() {
+        return specificItem3;
+    }
+
+    public String getSpecificItem4() {
+        return specificItem4;
+    }
+
+    public String getSpecificItem5() {
+        return specificItem5;
     }
 
     public String getLocationID() {

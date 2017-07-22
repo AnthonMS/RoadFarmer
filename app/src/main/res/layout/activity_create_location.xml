@@ -85,7 +85,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_alignParentRight="true"
                     android:singleLine="true"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:hint="@string/create_cityHint"/>
 
                 <Button
@@ -120,28 +120,32 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
+                    android:clickable="true"
                     android:textAlignment="center"
                     android:textSize="20dp"
                     android:textColor="@android:color/holo_blue_dark"
                     android:text="@string/create_addSellingText"/>
 
-                <EditText
-                    android:id="@+id/create_addCustomItems"
+                <TextView
+                    android:id="@+id/create_addedItemText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/create_addSellingItems"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:singleLine="true"
-                    android:hint="@string/create_customItemHint"/>
+                    android:clickable="true"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    android:text="No items selected yet"/>
+
 
                 <ImageView
                     android:id="@+id/create_itemView1"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:layout_below="@+id/create_addCustomItems"
+                    android:layout_below="@+id/create_addedItemText"
                     android:layout_alignParentLeft="true"
                     android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
@@ -152,7 +156,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:layout_below="@+id/create_addCustomItems"
+                    android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView1"
                     android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
@@ -163,7 +167,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:layout_below="@+id/create_addCustomItems"
+                    android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView2"
                     android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
@@ -174,7 +178,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:layout_below="@+id/create_addCustomItems"
+                    android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView3"
                     android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
@@ -185,17 +189,28 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
-                    android:layout_below="@+id/create_addCustomItems"
+                    android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView4"
                     android:layout_marginTop="0dp"
                     android:layout_marginLeft="20dp"
                     android:src="@drawable/nl_flag_icon"/>
 
                 <EditText
+                    android:id="@+id/create_addCustomItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@+id/create_itemView1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:singleLine="true"
+                    android:hint="@string/create_customItemHint"/>
+
+                <EditText
                     android:id="@+id/create_editDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/create_itemView1"
+                    android:layout_below="@+id/create_addCustomItems"
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"

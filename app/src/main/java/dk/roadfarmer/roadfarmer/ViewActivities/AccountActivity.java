@@ -106,6 +106,7 @@ public class AccountActivity extends AppCompatActivity implements
         mDrawerLayout = (DrawerLayout) findViewById(R.id.account_drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.account_nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_account2);
         closeNavBtn = (ImageButton) findViewById(R.id.account_closeNavBar);
         closeNavBtn.setOnClickListener(buttonClickListener);
 
@@ -448,10 +449,10 @@ public class AccountActivity extends AppCompatActivity implements
                 toastMessage(getString(R.string.toast_accountShowing));
                 break;
             case R.id.nav_create2:
-                toastMessage("Trying to create Location");
-                /*Intent intent2 = new Intent(AccountActivity.this, CreateLocationActivity.class);
+                //toastMessage("Trying to create Location");
+                Intent intent2 = new Intent(AccountActivity.this, CreateLocationActivity.class);
                 startActivity(intent2);
-                finish();*/
+                finish();
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");

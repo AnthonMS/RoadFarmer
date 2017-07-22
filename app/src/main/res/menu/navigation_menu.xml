@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_kort"
-        android:icon="@drawable/map_black"
-        android:title="@string/navStr_map" />
+    <group android:id="@+id/nav_mapGroup"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_kort"
+            android:icon="@drawable/map_black"
+            android:title="@string/navStr_map" />
+
+    </group>
 
     <item android:title="@string/nav_userTitle">
         <menu>
-            <group android:id="@+id/nav_userGroup">
+            <group android:id="@+id/nav_userGroup"
+                android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_login"
                 android:icon="@drawable/login"
