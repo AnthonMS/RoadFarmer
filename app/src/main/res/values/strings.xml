@@ -47,6 +47,15 @@
     <string name="account_mailTxt">Email: </string>
     <string name="account_sellingLocTxt">Show your selling location</string>
 
+    <string name="create_roadHint">Road</string>
+    <string name="create_noHint">No.</string>
+    <string name="create_zipHint">Zip</string>
+    <string name="create_cityHint">City</string>
+    <string name="create_addSellingText">Add items for sale at your location</string>
+    <string name="create_customItemHint">This is only shown when other selected above</string>
+    <string name="create_descriptionHint">This where you write a bit about why you sell what you sell. If it is homegrown, how you grow it and what kinds of fertilizer you use.</string>
+    <string name="create_createBtnText">Create</string>
+
     <string name="dialog_newValueHint">Enter new value</string>
     <string name="dialog_changeBtnTxt">Change</string>
     <string name="dialog_cancelBtnTxt">Cancel</string>

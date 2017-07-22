@@ -385,12 +385,15 @@ public class AccountActivity extends AppCompatActivity implements
                     break;
                 case 1:
                     toastMessage("Hjælp");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 2:
                     toastMessage("Indstillinger");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 3:
                     toastMessage("Om");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 4:
                     //toastMessage("Log ud");

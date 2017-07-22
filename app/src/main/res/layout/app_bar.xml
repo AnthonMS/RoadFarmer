@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/spinner_helpDropDown"
-            android:background="@drawable/flag_icon"
+            android:background="@drawable/flag_icon_two"
             android:entries="@array/listLanguages">
         </android.support.v7.widget.AppCompatSpinner>
 

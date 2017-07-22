@@ -8,6 +8,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.content.res.Configuration;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -53,8 +55,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import dk.roadfarmer.roadfarmer.R;
@@ -68,6 +73,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         NavigationView.OnNavigationItemSelectedListener
 {
     private DrawerLayout mDrawerLayout;
+    private final Context context = this;
 
     // Google Maps stuff
     private GoogleMap mMap;
@@ -264,6 +270,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onLocationChanged(Location location) {
         lastLocation = location;
 
+        /*Geocoder gCoder = new Geocoder(context, Locale.getDefault());
+        List<Address> addressList = new ArrayList<>();
+        try {
+            addressList = gCoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < addressList.size(); i++) {
+            Address address = addressList.get(i);
+            String city = address.getAddressLine(0);
+            toastMessage(city);
+        }*/
+
+        // Saving the lat & long in shared preferences, so if the user clicks my location button in CreateLocation- I can access the lat&long so I can make a address from that.
+        // I do not know if this will be possible. But I will try.
+        SharedPreferences sharedPref = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        float i1 = (float) lastLocation.getLatitude();
+        float i2 = (float) lastLocation.getLongitude();
+        editor.putFloat("lastLat", i1).apply();
+        editor.putFloat("lastLong", i2).apply();
+
         if (currentLocationMarker != null)
         {
             currentLocationMarker.remove();
@@ -421,12 +450,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
                 case 1:
                     toastMessage("Hjælp");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 2:
                     toastMessage("Indstillinger");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 3:
                     toastMessage("Om");
+                    spinnerHelp.setSelection(0);
                     break;
                 case 4:
                     //toastMessage("Log ud");
@@ -492,7 +524,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 finish();
                 break;
             case R.id.nav_create2:
+                // Try and get the lastLocation in a string from Shared Preferences.
+                // If that doesn't work, try and send it with the intent.
                 toastMessage("Trying to create location");
+                Intent intent4 = new Intent(MapsActivity.this, CreateLocationActivity.class);
+                startActivity(intent4);
+                finish();
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");

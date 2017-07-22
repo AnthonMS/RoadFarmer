@@ -47,6 +47,15 @@
     <string name="account_mailTxt">Mail: </string>
     <string name="account_sellingLocTxt">Hvis din sælger placering</string>
 
+    <string name="create_roadHint">Vejnavn</string>
+    <string name="create_noHint">Nr.</string>
+    <string name="create_zipHint">Zip</string>
+    <string name="create_cityHint">By</string>
+    <string name="create_addSellingText">Tilføj ting der sælges</string>
+    <string name="create_customItemHint">Det her er kun vist når andet er valgt ovenover.</string>
+    <string name="create_descriptionHint">Her er hvor du skriver lidt om hvorfor du sælger de ting som du nu sælger. Hvis det er hjemmegroet kan du skrive lidt om hvad for noget gødning der er brugt og sådan noget.</string>
+    <string name="create_createBtnText">Opret</string>
+
     <string name="dialog_newValueHint">Skriv ny værdi</string>
     <string name="dialog_changeBtnTxt">Ændrer</string>
     <string name="dialog_cancelBtnTxt">Anuller</string>
