@@ -67,6 +67,49 @@
     <string name="dialog_adding">Tilføjer: </string>
 
 
+    <string-array name="listOverallCategory">
+        <item>Vælg en</item>
+        <item>Bær</item>
+        <item>Frugter</item>
+        <item>Grøntsager</item>
+        <item>Kød</item>
+        <item>Andet</item>
+    </string-array>
+
+    <string-array name="listSpecificFruits">
+        <item>Vælg en</item>
+        <item>Æbler</item>
+        <item>Pærer</item>
+        <item>Blommer</item>
+        <item>Appelsiner</item>
+        <item>Andet</item>
+    </string-array>
+
+    <string-array name="listSpecificBerries">
+        <item>Vælg en</item>
+        <item>Kirsebær</item>
+        <item>Blåbær</item>
+        <item>Hindbær</item>
+        <item>Jordbær</item>
+        <item>Andet</item>
+    </string-array>
+
+    <string-array name="listSpecificVeggies">
+        <item>Vælg en</item>
+        <item>Ærter</item>
+        <item>Grønt 2</item>
+        <item>Grønt 3</item>
+        <item>Grønt 4</item>
+        <item>Andet</item>
+    </string-array>
+
+    <string-array name="listSpecificMeats">
+        <item>Vælg en</item>
+        <item>Frisk</item>
+        <item>Frost</item>
+        <item>Andet</item>
+    </string-array>
+
 
     <string-array name="listSettingSelection">
         <item>Vælg en</item>

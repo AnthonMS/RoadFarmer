@@ -11,6 +11,10 @@ public class SellingLocation
     private String sellingItem;
     private String locationID;
     private String overallCategory;
+    private String overallCategory2;
+    private String overallCategory3;
+    private String overallCategory4;
+    private String overallCategory5;
     private String specificItem1;
     private String specificItem2;
     private String specificItem3;
@@ -37,6 +41,38 @@ public class SellingLocation
 
     public void setOverallCategory(String overallCategory) {
         this.overallCategory = overallCategory;
+    }
+
+    public void setOverallCategory2(String overallCategory2) {
+        this.overallCategory2 = overallCategory2;
+    }
+
+    public void setOverallCategory3(String overallCategory3) {
+        this.overallCategory3 = overallCategory3;
+    }
+
+    public void setOverallCategory4(String overallCategory4) {
+        this.overallCategory4 = overallCategory4;
+    }
+
+    public void setOverallCategory5(String overallCategory5) {
+        this.overallCategory5 = overallCategory5;
+    }
+
+    public String getOverallCategory2() {
+        return overallCategory2;
+    }
+
+    public String getOverallCategory3() {
+        return overallCategory3;
+    }
+
+    public String getOverallCategory4() {
+        return overallCategory4;
+    }
+
+    public String getOverallCategory5() {
+        return overallCategory5;
     }
 
     public void setSpecificItem1(String specificItem1) {

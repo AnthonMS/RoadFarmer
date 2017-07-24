@@ -65,9 +65,10 @@ public class CreateLocationActivity extends AppCompatActivity implements
             item1ImgView, item2ImgView, item3ImgView, item4ImgView, item5ImgView;
     private EditText editRoad, editNo, editZip, editCity, editCustomItems, editDescription;
     private Button addImgBtn, getLocBtn, createSellingLocBtn;
+    private TextView addedItemTextView;
 
     // Variables used to check which items selected to sell
-    private String overallCategory;
+    private String overallCategory, overallCategory2, overallCategory3, overallCategory4, overallCategory5;
     private String specificItem1;
     private String specificItem2;
     private String specificItem3;
@@ -128,6 +129,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
         editCity = (EditText) findViewById(R.id.create_editCity);
         editCustomItems = (EditText) findViewById(R.id.create_addCustomItems);
         editDescription = (EditText) findViewById(R.id.create_editDescription);
+        addedItemTextView = (TextView) findViewById(R.id.create_addedItemText);
         addImgBtn = (Button) findViewById(R.id.create_addImgBtn);
         getLocBtn = (Button) findViewById(R.id.create_getLocBtn);
         createSellingLocBtn = (Button) findViewById(R.id.create_createLocBtn);
@@ -225,6 +227,89 @@ public class CreateLocationActivity extends AppCompatActivity implements
         return false;
     }
 
+    private void setOverallCategory(String oaCategory)
+    {
+        if (TextUtils.isEmpty(overallCategory)) // If overallCategory is empty, set overallCategory
+        {
+            overallCategory = oaCategory;
+        }
+        else if ((TextUtils.isEmpty(overallCategory2))
+                && (! oaCategory.equals(overallCategory))) // if overallCategory was not empty and oaCategory is not the same
+        {
+            overallCategory2 = oaCategory;
+        }
+        else if ((TextUtils.isEmpty(overallCategory3))
+                && (! oaCategory.equals(overallCategory))
+                && (! oaCategory.equals(overallCategory2))) // so on
+        {
+            overallCategory3 = oaCategory;
+        }
+        else if ((TextUtils.isEmpty(overallCategory4))
+                && (! oaCategory.equals(overallCategory))
+                && (! oaCategory.equals(overallCategory2))
+                && (! oaCategory.equals(overallCategory3))) // so on
+        {
+            overallCategory4 = oaCategory;
+        }
+        else if ((TextUtils.isEmpty(overallCategory5))
+                && (! oaCategory.equals(overallCategory))
+                && (! oaCategory.equals(overallCategory2))
+                && (! oaCategory.equals(overallCategory3))
+                && (! oaCategory.equals(overallCategory4))) // so on
+        {
+            overallCategory5 = oaCategory;
+        }
+    }
+
+    private void setSpecificItem(String item)
+    {
+        if (TextUtils.isEmpty(specificItem1)) // If overallCategory is empty, set overallCategory
+        {
+            specificItem1 = item;
+        }
+        else if ((TextUtils.isEmpty(specificItem2))
+                && (! item.equals(specificItem1))) // if overallCategory was not empty and oaCategory is not the same
+        {
+            specificItem2 = item;
+        }
+        else if ((TextUtils.isEmpty(specificItem3))
+                && (! item.equals(specificItem1))
+                && (! item.equals(specificItem2))) // so on
+        {
+            specificItem3 = item;
+        }
+        else if ((TextUtils.isEmpty(specificItem4))
+                && (! item.equals(specificItem1))
+                && (! item.equals(specificItem2))
+                && (! item.equals(specificItem3))) // so on
+        {
+            specificItem4 = item;
+        }
+        else if ((TextUtils.isEmpty(specificItem5))
+                && (! item.equals(specificItem1))
+                && (! item.equals(specificItem2))
+                && (! item.equals(specificItem3))
+                && (! item.equals(specificItem4))) // so on
+        {
+            specificItem5 = item;
+        }
+    }
+
+    private boolean checkEmptyItems()
+    {
+        if (TextUtils.isEmpty(overallCategory))
+        {
+            toastMessage("You need to select at least one overall category");
+            return true;
+        }
+        if (TextUtils.isEmpty(specificItem1))
+        {
+            toastMessage("You need to select at least one item");
+            return  true;
+        }
+        return false;
+    }
+
     Spinner spinnerOverall;
     Spinner spinnerSpecific;
     private void showAddItemDialog(String title)
@@ -242,6 +327,26 @@ public class CreateLocationActivity extends AppCompatActivity implements
         spinnerSpecific = (Spinner) dialog.findViewById(R.id.spinner_chooseSpecificCategory);
         spinnerOverall.setOnItemSelectedListener(overallListener);
         //spinnerSpecific.setOnItemSelectedListener(fruitListener);
+
+        Button dialog_okBtn = (Button) dialog.findViewById(R.id.dialog_okBtn);
+        dialog_okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = spinnerOverall.getSelectedItemPosition();
+                //Object obj = spinnerOverall.getItemAtPosition(i);
+                //overallCategory = obj.toString();
+                if (i == 1) // Berries
+                {
+                    overallCategory = "Berries";
+                }
+                else if (i == 2) // Fruits
+                {
+                    overallCategory = "Fruits";
+                }
+                toastMessage(overallCategory);
+                //addedItemTextView.setText(overallCategory);
+            }
+        });
 
         dialog.show();
     }
@@ -264,6 +369,10 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter);
                     spinnerSpecific.setOnItemSelectedListener(berryListener);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Berries");
+
                     break;
                 case 2:
                     // Fruits selected
@@ -271,14 +380,32 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter2);
                     spinnerSpecific.setOnItemSelectedListener(fruitListener);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Fruits");
                     break;
                 case 3:
                     // Vegetables selected
-                    toastMessage("you select vegetables");
+                    ArrayAdapter adapter3 = ArrayAdapter.createFromResource(context, R.array.listSpecificVeggies, android.R.layout.simple_spinner_item);
+                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter3);
+                    spinnerSpecific.setOnItemSelectedListener(veggieListener);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Vegetables");
                     break;
                 case 4:
                     // Meat selected
-                    toastMessage("you select meat");
+                    ArrayAdapter adapter4 = ArrayAdapter.createFromResource(context, R.array.listSpecificMeats, android.R.layout.simple_spinner_item);
+                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter4);
+                    spinnerSpecific.setOnItemSelectedListener(meatListener);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Meat");
+                    break;
+                case 5: // other
+                    toastMessage("Other selected");
                     break;
             }
         }
@@ -298,15 +425,24 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 case 0: // Choose one
                     break;
                 case 1: // Cherries
-                    toastMessage("Test");
+                    //setSpecificItem("Cherries");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 2: // Blueberry
+                    //setSpecificItem("Blueberry");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 3: // Raspberry
+                    //setSpecificItem("Raspberry");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 4: // Strawberry
+                    //setSpecificItem("Strawberry");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
-                case 5: // For later when more berries are added to the array
+                case 5: // Other
+                    //setSpecificItem("Other");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 6: // For later
                     break;
@@ -329,15 +465,24 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 case 0: // Choose one
                     break;
                 case 1: // Apples
-                    toastMessage("Apple");
+                    //setSpecificItem("Apples");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 2: // Pares
+                    //setSpecificItem("Pares");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 3: // Plumes
+                    //setSpecificItem("Plumes");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 4: // Oranges
+                    //setSpecificItem("Oranges");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
-                case 5: // For later when more fruits are added to the array
+                case 5: // Other
+                    //setSpecificItem("Other");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
                     break;
                 case 6: // For later
                     break;
@@ -350,6 +495,73 @@ public class CreateLocationActivity extends AppCompatActivity implements
         }
     };
 
+    private AdapterView.OnItemSelectedListener veggieListener = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            switch (position)
+            {
+                case 0: // Choose one
+                    break;
+                case 1: // Peas
+                    //setSpecificItem("Peas");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 2: // Veggie 2
+                    //setSpecificItem("Veggie2");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 3: // Veggie 3
+                    //setSpecificItem("Veggie3");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 4: // Veggie 4
+                    //setSpecificItem("Veggie4");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 5: // Other
+                    //setSpecificItem("Other");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 6: // For later
+                    break;
+                case 7: // For later
+                    break;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener meatListener = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            switch (position)
+            {
+                case 0: // Choose one
+                    break;
+                case 1: // fresh
+                    //setSpecificItem("Fresh");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 2: // Frost
+                    //setSpecificItem("Frost");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+                case 3: // Other
+                    //setSpecificItem("Other");
+                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    break;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
 
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()

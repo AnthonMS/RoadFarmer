@@ -90,6 +90,7 @@
         <item>Fruits</item>
         <item>Vegetables</item>
         <item>Meat</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="listSpecificFruits">
@@ -98,6 +99,7 @@
         <item>Pares</item>
         <item>Plumes</item>
         <item>Oranges</item>
+        <item>Other</item>
     </string-array>
 
     <string-array name="listSpecificBerries">
@@ -106,6 +108,23 @@
         <item>Blueberries</item>
         <item>Raspberries</item>
         <item>Strawberries</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="listSpecificVeggies">
+        <item>Choose one</item>
+        <item>Peas</item>
+        <item>Veggie 2</item>
+        <item>Veggie 3</item>
+        <item>Veggie 4</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="listSpecificMeats">
+        <item>Choose one</item>
+        <item>Fresh</item>
+        <item>Frost</item>
+        <item>Other</item>
     </string-array>
 
 
