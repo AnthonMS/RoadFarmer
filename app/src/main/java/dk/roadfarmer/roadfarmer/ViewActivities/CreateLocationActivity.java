@@ -36,6 +36,7 @@ import org.w3c.dom.Text;
 import java.util.Locale;
 
 import dk.roadfarmer.roadfarmer.Models.SellingLocation;
+import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
 public class CreateLocationActivity extends AppCompatActivity implements
@@ -65,7 +66,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
             item1ImgView, item2ImgView, item3ImgView, item4ImgView, item5ImgView;
     private EditText editRoad, editNo, editZip, editCity, editCustomItems, editDescription;
     private Button addImgBtn, getLocBtn, createSellingLocBtn;
-    private TextView addedItemTextView;
+    private TextView addItemsText, addedItemTextView;
 
     // Variables used to check which items selected to sell
     private String overallCategory, overallCategory2, overallCategory3, overallCategory4, overallCategory5;
@@ -130,6 +131,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
         editCustomItems = (EditText) findViewById(R.id.create_addCustomItems);
         editDescription = (EditText) findViewById(R.id.create_editDescription);
         addedItemTextView = (TextView) findViewById(R.id.create_addedItemText);
+        addItemsText = (TextView) findViewById(R.id.create_addSellingItems);
         addImgBtn = (Button) findViewById(R.id.create_addImgBtn);
         getLocBtn = (Button) findViewById(R.id.create_getLocBtn);
         createSellingLocBtn = (Button) findViewById(R.id.create_createLocBtn);
@@ -137,12 +139,13 @@ public class CreateLocationActivity extends AppCompatActivity implements
         addImgBtn.setOnClickListener(buttonClickListener);
         getLocBtn.setOnClickListener(buttonClickListener);
         createSellingLocBtn.setOnClickListener(buttonClickListener);
+        addItemsText.setOnClickListener(buttonClickListener);
 
     }
 
     private void createSellingLocation()
     {
-        if (! checkEmptyFields())
+        if (! checkEmptyFields() && ! checkEmptyItems())
         {
             // No empty fields and at least one overallCategory and one specificItem chosen
             String getRoad = editRoad.getText().toString().trim();
@@ -159,26 +162,95 @@ public class CreateLocationActivity extends AppCompatActivity implements
             {
                 e.printStackTrace();
             }
-            overallCategory = "Bær"; // F.ex Bær, Frugt, Grøntsager, Kød
-            specificItem1 = "Jordbær"; // F.ex. Jordbær, Hindtbær, Blåbær osv. anden kategori Kartofler, Ærter osv.
-            specificItem2 = "Hindbær";
 
             String locationID = myRootRef.push().getKey();
             SellingLocation sellingLocation = new SellingLocation(getRoad, getCity, iNo, iZip, locationID);
+            sellingLocation.setDescription(getDesc);
+            sellingLocation.setUserID(firebaseAuth.getCurrentUser().getUid());
             sellingLocation.setOverallCategory(overallCategory);
             sellingLocation.setSpecificItem1(specificItem1);
-            sellingLocation.setSpecificItem2(specificItem2);
+            if (!TextUtils.isEmpty(specificItem2))
+            {
+                sellingLocation.setSpecificItem2(specificItem2);
+            }
+            if (!TextUtils.isEmpty(specificItem3))
+            {
+                sellingLocation.setSpecificItem3(specificItem3);
+            }
+            if (!TextUtils.isEmpty(specificItem4))
+            {
+                sellingLocation.setSpecificItem4(specificItem4);
+            }
+            if (!TextUtils.isEmpty(specificItem5))
+            {
+                sellingLocation.setSpecificItem5(specificItem5);
+            }
+            if (!TextUtils.isEmpty(overallCategory2))
+            {
+                sellingLocation.setOverallCategory2(overallCategory2);
+            }
+            if (!TextUtils.isEmpty(overallCategory3))
+            {
+                sellingLocation.setOverallCategory3(overallCategory3);
+            }
+            if (!TextUtils.isEmpty(overallCategory4))
+            {
+                sellingLocation.setOverallCategory4(overallCategory4);
+            }
+            if (!TextUtils.isEmpty(overallCategory5))
+            {
+                sellingLocation.setOverallCategory5(overallCategory5);
+            }
             // Saving under RootSellingLocations
             myRootRef.child("RootSellingLocations").child(locationID).setValue(sellingLocation);
             // Saving under OverallSellingLocations/overallCategory
             myRootRef.child("OverallSellingLocations").child(overallCategory).child(locationID).setValue(sellingLocation);
             // Saving in the specificSellingLocations/specificItem1
-            myRootRef.child("SpecifigSellingLocations").child(overallCategory).child(specificItem1).child(locationID).setValue(sellingLocation);
-            myRootRef.child("SpecifigSellingLocations").child(overallCategory).child(specificItem2).child(locationID).setValue(sellingLocation);
+            myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem1).child(locationID).setValue(sellingLocation);
+            if (!TextUtils.isEmpty(specificItem2))
+            {
+                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem2).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(specificItem3))
+            {
+                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem3).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(specificItem4))
+            {
+                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem4).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(specificItem5))
+            {
+                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem5).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(overallCategory2))
+            {
+                myRootRef.child("OverallSellingLocations").child(overallCategory2).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(overallCategory3))
+            {
+                myRootRef.child("OverallSellingLocations").child(overallCategory3).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(overallCategory4))
+            {
+                myRootRef.child("OverallSellingLocations").child(overallCategory4).child(locationID).setValue(sellingLocation);
+            }
+            if (!TextUtils.isEmpty(overallCategory5))
+            {
+                myRootRef.child("OverallSellingLocations").child(overallCategory5).child(locationID).setValue(sellingLocation);
+            }
+
+            myRootRef.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserInfo").child("numberOfCreatedLocations").setValue(1);
+            myRootRef.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserInfo").child("locationID").setValue(locationID);
+
+            //SharedPreferences sharedPref = getSharedPreferences("numberOfCreatedLocations", Context.MODE_PRIVATE);
+            //SharedPreferences.Editor editor = sharedPref.edit();
+            //editor.putString("currentNumber", "1").apply();
+
         }
         else
         {
-            // empty text fields
+            // empty text fields and item fields
         }
     }
 
@@ -227,38 +299,162 @@ public class CreateLocationActivity extends AppCompatActivity implements
         return false;
     }
 
-    private void setOverallCategory(String oaCategory)
+    private void setOverallCategory()
     {
         if (TextUtils.isEmpty(overallCategory)) // If overallCategory is empty, set overallCategory
         {
-            overallCategory = oaCategory;
+            overallCategory = getChosenCategory();
         }
         else if ((TextUtils.isEmpty(overallCategory2))
-                && (! oaCategory.equals(overallCategory))) // if overallCategory was not empty and oaCategory is not the same
+                && (! getChosenCategory().equals(overallCategory))) // if overallCategory was not empty and oaCategory is not the same
         {
-            overallCategory2 = oaCategory;
+            overallCategory2 = getChosenCategory();
         }
         else if ((TextUtils.isEmpty(overallCategory3))
-                && (! oaCategory.equals(overallCategory))
-                && (! oaCategory.equals(overallCategory2))) // so on
+                && (! getChosenCategory().equals(overallCategory))
+                && (! getChosenCategory().equals(overallCategory2))) // so on
         {
-            overallCategory3 = oaCategory;
+            overallCategory3 = getChosenCategory();
         }
         else if ((TextUtils.isEmpty(overallCategory4))
-                && (! oaCategory.equals(overallCategory))
-                && (! oaCategory.equals(overallCategory2))
-                && (! oaCategory.equals(overallCategory3))) // so on
+                && (! getChosenCategory().equals(overallCategory))
+                && (! getChosenCategory().equals(overallCategory2))
+                && (! getChosenCategory().equals(overallCategory3))) // so on
         {
-            overallCategory4 = oaCategory;
+            overallCategory4 = getChosenCategory();
         }
         else if ((TextUtils.isEmpty(overallCategory5))
-                && (! oaCategory.equals(overallCategory))
-                && (! oaCategory.equals(overallCategory2))
-                && (! oaCategory.equals(overallCategory3))
-                && (! oaCategory.equals(overallCategory4))) // so on
+                && (! getChosenCategory().equals(overallCategory))
+                && (! getChosenCategory().equals(overallCategory2))
+                && (! getChosenCategory().equals(overallCategory3))
+                && (! getChosenCategory().equals(overallCategory4))) // so on
         {
-            overallCategory5 = oaCategory;
+            overallCategory5 = getChosenCategory();
         }
+    }
+
+    private String getChosenCategory()
+    {
+        String tempString = "";
+        int i = spinnerOverall.getSelectedItemPosition();
+        //Object obj = spinnerOverall.getItemAtPosition(i);
+        //overallCategory = obj.toString();
+        switch (i)
+        {
+            case 1:
+                tempString = "Berries";
+                break;
+            case 2:
+                tempString = "Fruits";
+                break;
+            case 3:
+                tempString = "Vegetables";
+                break;
+            case 4:
+                tempString = "Meat";
+                break;
+            case 5:
+                tempString = "Other";
+                break;
+            case 6:
+                break;
+        }
+
+        return tempString;
+    }
+
+    private String getSpecificBerries()
+    {
+        String tempString = "";
+        int i = spinnerSpecific.getSelectedItemPosition();
+        switch (i)
+        {
+            case 1: // Cherries
+                tempString = "Cherries";
+                break;
+            case 2: // Blueberries
+                tempString = "Blueberries";
+                break;
+            case 3: // Raspberries
+                tempString = "Raspberries";
+                break;
+            case 4: // Strawberries
+                tempString = "Strawberries";
+                break;
+            case 5: // Other
+                tempString = "Other";
+                break;
+        }
+        return tempString;
+    }
+
+    private String getSpecificFruits()
+    {
+        String tempString = "";
+        int i = spinnerSpecific.getSelectedItemPosition();
+        switch (i)
+        {
+            case 1: // Apples
+                tempString = "Apples";
+                break;
+            case 2: // Blueberries
+                tempString = "Pears";
+                break;
+            case 3: // Raspberries
+                tempString = "Plums";
+                break;
+            case 4: // Strawberries
+                tempString = "Oranges";
+                break;
+            case 5: // Other
+                tempString = "Other";
+                break;
+        }
+        return tempString;
+    }
+
+    private String getSpecificVegetables()
+    {
+        String tempString = "";
+        int i = spinnerSpecific.getSelectedItemPosition();
+        switch (i)
+        {
+            case 1: // Apples
+                tempString = "Peas";
+                break;
+            case 2: // Blueberries
+                tempString = "Veggie 2";
+                break;
+            case 3: // Raspberries
+                tempString = "Veggie 3";
+                break;
+            case 4: // Strawberries
+                tempString = "Veggie 4";
+                break;
+            case 5: // Other
+                tempString = "Other";
+                break;
+        }
+        return tempString;
+    }
+
+    private String getSpecificMeats()
+    {
+        String tempString = "";
+        int i = spinnerSpecific.getSelectedItemPosition();
+        switch (i)
+        {
+            case 1: // Apples
+                tempString = "Fresh";
+                break;
+            case 2: // Blueberries
+                tempString = "Frost";
+                break;
+            case 3: // Raspberries
+                tempString = "Other";
+                break;
+        }
+        return tempString;
     }
 
     private void setSpecificItem(String item)
@@ -332,23 +528,108 @@ public class CreateLocationActivity extends AppCompatActivity implements
         dialog_okBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = spinnerOverall.getSelectedItemPosition();
-                //Object obj = spinnerOverall.getItemAtPosition(i);
-                //overallCategory = obj.toString();
-                if (i == 1) // Berries
+                //toastMessage(getChosenCategory());
+                setOverallCategory();
+                //toastMessage(overallCategory + " " + overallCategory2 + " " + overallCategory3 + " " + overallCategory4 + " " + overallCategory5);
+
+                if (spinnerOverall.getSelectedItemPosition() == 1) // Berries chosen in overallCategory spinner
                 {
-                    overallCategory = "Berries";
+                    setSpecificItem(getSpecificBerries());
                 }
-                else if (i == 2) // Fruits
+                else if (spinnerOverall.getSelectedItemPosition() == 2) // Fruits chosen
                 {
-                    overallCategory = "Fruits";
+                    setSpecificItem(getSpecificFruits());
                 }
-                toastMessage(overallCategory);
-                //addedItemTextView.setText(overallCategory);
+                else if (spinnerOverall.getSelectedItemPosition() == 3) // Vegetables chosen
+                {
+                    setSpecificItem(getSpecificVegetables());
+                }
+                else if (spinnerOverall.getSelectedItemPosition() == 4) // Meats chosen
+                {
+                    setSpecificItem(getSpecificMeats());
+                }
+                else if (spinnerOverall.getSelectedItemPosition() == 5) // Other chosen
+                {
+                    //setSpecificItem(getSpecificFruits());
+                }
+                //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+
+                if (! checkEmptyItems())
+                {
+                    setItemView(specificItem1, item1ImgView);
+                    setItemView(specificItem2, item2ImgView);
+                    setItemView(specificItem3, item3ImgView);
+                    setItemView(specificItem4, item4ImgView);
+                    setItemView(specificItem5, item5ImgView);
+                }
+                else
+                {
+
+                }
+
+                addedItemTextView.setText(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+
+                dialog.dismiss();
             }
         });
 
         dialog.show();
+    }
+
+    private void setItemView(String str, ImageView imgView)
+    {
+        if (str != "")
+        {
+            // Not empty
+            if (str == "Cherries")
+            {
+                imgView.setImageResource(R.drawable.cherry_one);
+            }
+            else if (str == "Blueberries")
+            {
+                imgView.setImageResource(R.drawable.blueberry);
+            }
+            else if (str == "Raspberries")
+            {
+                imgView.setImageResource(R.drawable.rasp_two);
+            }
+            else if (str == "Strawberries")
+            {
+                imgView.setImageResource(R.drawable.straw_one);
+            }
+            else if (str == "Apples")
+            {
+                imgView.setImageResource(R.drawable.apple_one);
+            }
+            else if (str == "Pears")
+            {
+                imgView.setImageResource(R.drawable.pare_one);
+            }
+            else if (str == "Plums")
+            {
+                imgView.setImageResource(R.drawable.plum_one);
+            }
+            else if (str == "Oranges")
+            {
+                imgView.setImageResource(R.drawable.orange_one);
+            }
+            else if (str == "Peas")
+            {
+                imgView.setImageResource(R.drawable.peas_one);
+            }
+            else if (str == "Veggie 2")
+            {
+
+            }
+            else if (str == "Fresh")
+            {
+                imgView.setImageResource(R.drawable.fresh_one);
+            }
+            else if (str == "Frost")
+            {
+                imgView.setImageResource(R.drawable.frost_one);
+            }
+        }
     }
 
     private AdapterView.OnItemSelectedListener overallListener = new AdapterView.OnItemSelectedListener()
@@ -368,7 +649,6 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     ArrayAdapter adapter = ArrayAdapter.createFromResource(context, R.array.listSpecificBerries, android.R.layout.simple_spinner_item);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter);
-                    spinnerSpecific.setOnItemSelectedListener(berryListener);
 
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Berries");
@@ -379,7 +659,6 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     ArrayAdapter adapter2 = ArrayAdapter.createFromResource(context, R.array.listSpecificFruits, android.R.layout.simple_spinner_item);
                     adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter2);
-                    spinnerSpecific.setOnItemSelectedListener(fruitListener);
 
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Fruits");
@@ -389,7 +668,6 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     ArrayAdapter adapter3 = ArrayAdapter.createFromResource(context, R.array.listSpecificVeggies, android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter3);
-                    spinnerSpecific.setOnItemSelectedListener(veggieListener);
 
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Vegetables");
@@ -399,162 +677,12 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     ArrayAdapter adapter4 = ArrayAdapter.createFromResource(context, R.array.listSpecificMeats, android.R.layout.simple_spinner_item);
                     adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerSpecific.setAdapter(adapter4);
-                    spinnerSpecific.setOnItemSelectedListener(meatListener);
 
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Meat");
                     break;
                 case 5: // other
-                    toastMessage("Other selected");
-                    break;
-            }
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
-
-
-    private AdapterView.OnItemSelectedListener berryListener = new AdapterView.OnItemSelectedListener()
-    {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            switch (position)
-            {
-                case 0: // Choose one
-                    break;
-                case 1: // Cherries
-                    //setSpecificItem("Cherries");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 2: // Blueberry
-                    //setSpecificItem("Blueberry");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 3: // Raspberry
-                    //setSpecificItem("Raspberry");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 4: // Strawberry
-                    //setSpecificItem("Strawberry");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 5: // Other
-                    //setSpecificItem("Other");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 6: // For later
-                    break;
-                case 7: // For later
-                    break;
-            }
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener fruitListener = new AdapterView.OnItemSelectedListener()
-    {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            switch (position)
-            {
-                case 0: // Choose one
-                    break;
-                case 1: // Apples
-                    //setSpecificItem("Apples");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 2: // Pares
-                    //setSpecificItem("Pares");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 3: // Plumes
-                    //setSpecificItem("Plumes");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 4: // Oranges
-                    //setSpecificItem("Oranges");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 5: // Other
-                    //setSpecificItem("Other");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 6: // For later
-                    break;
-                case 7: // For later
-                    break;
-            }
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener veggieListener = new AdapterView.OnItemSelectedListener()
-    {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            switch (position)
-            {
-                case 0: // Choose one
-                    break;
-                case 1: // Peas
-                    //setSpecificItem("Peas");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 2: // Veggie 2
-                    //setSpecificItem("Veggie2");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 3: // Veggie 3
-                    //setSpecificItem("Veggie3");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 4: // Veggie 4
-                    //setSpecificItem("Veggie4");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 5: // Other
-                    //setSpecificItem("Other");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 6: // For later
-                    break;
-                case 7: // For later
-                    break;
-            }
-        }
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener meatListener = new AdapterView.OnItemSelectedListener()
-    {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-        {
-            switch (position)
-            {
-                case 0: // Choose one
-                    break;
-                case 1: // fresh
-                    //setSpecificItem("Fresh");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 2: // Frost
-                    //setSpecificItem("Frost");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
-                    break;
-                case 3: // Other
-                    //setSpecificItem("Other");
-                    //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
+                    //toastMessage("Other selected");
                     break;
             }
         }
@@ -579,7 +707,6 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     break;
                 case R.id.create_addImgBtn:
                     toastMessage("add image");
-                    showAddItemDialog("Add image");
                     break;
                 case R.id.create_getLocBtn:
                     toastMessage("Get location");
@@ -588,7 +715,16 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     //toastMessage("Create selling location");
                     createSellingLocation();
                     break;
-
+                case R.id.create_addSellingItems:
+                    if (!TextUtils.isEmpty(specificItem5))
+                    {
+                        toastMessage("Maximum is 5 items");
+                    }
+                    else
+                    {
+                        showAddItemDialog("Add Item");
+                    }
+                    break;
             }
         }
     };
