@@ -52,6 +52,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -62,6 +67,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -74,6 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
     private DrawerLayout mDrawerLayout;
     private final Context context = this;
+    private int numberOfCreatedLocations;
 
     // Google Maps stuff
     private GoogleMap mMap;
@@ -96,6 +103,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // Firebase stuff
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRootRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_maps);
 
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         //chosenLanguage = intent.getExtras().getString("selectedLanguage");
         SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
         chosenLanguage = sharedPref.getString("currentLanguage", "");
@@ -119,10 +128,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRootRef = mFirebaseDatabase.getReference();
 
         if (firebaseAuth.getCurrentUser() != null)
         {
-            //toastMessage("current user != null");
+            myRootRef.child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("UserInfo").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    numberOfCreatedLocations = user.getNumberOfCreatedLocations();
+                    //toastMessage(numberOfCreatedLocations + "");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
         else
         {
@@ -531,9 +554,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Try and get the lastLocation in a string from Shared Preferences.
                 // If that doesn't work, try and send it with the intent.
                 //toastMessage("Trying to create location");
-                Intent intent4 = new Intent(MapsActivity.this, CreateLocationActivity.class);
-                startActivity(intent4);
-                finish();
+                if (numberOfCreatedLocations == 0) // no location created on beforehand
+                {
+                    Intent intent4 = new Intent(MapsActivity.this, CreateLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
+                else // Already has one location created.
+                {
+                    toastMessage("You already have one created.\nGo under change to see the settings.");
+                }
+
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");

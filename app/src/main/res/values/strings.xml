@@ -96,8 +96,8 @@
     <string-array name="listSpecificFruits">
         <item>Choose one</item>
         <item>Apples</item>
-        <item>Pares</item>
-        <item>Plumes</item>
+        <item>Pears</item>
+        <item>Plums</item>
         <item>Oranges</item>
         <item>Other</item>
     </string-array>

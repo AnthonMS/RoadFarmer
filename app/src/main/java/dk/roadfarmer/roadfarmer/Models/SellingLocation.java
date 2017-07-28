@@ -9,7 +9,10 @@ public class SellingLocation
     private String road, city;
     private int no, zip;
     private String sellingItem;
-    private String locationID;
+    private String locationID, userID;
+    private String description;
+    private String photoDownloadURL, photoID;
+
     private String overallCategory;
     private String overallCategory2;
     private String overallCategory3;
@@ -33,6 +36,38 @@ public class SellingLocation
         this.zip = zip;
         this.sellingItem = sellingItem;
         this.locationID = locationID;
+    }
+
+    public void setPhotoDownloadURL(String photoDownloadURL) {
+        this.photoDownloadURL = photoDownloadURL;
+    }
+
+    public void setPhotoID(String photoID) {
+        this.photoID = photoID;
+    }
+
+    public String getPhotoDownloadURL() {
+        return photoDownloadURL;
+    }
+
+    public String getPhotoID() {
+        return photoID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setLocationID(String locationID) {

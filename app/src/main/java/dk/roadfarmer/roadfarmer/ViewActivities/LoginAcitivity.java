@@ -252,8 +252,6 @@ public class LoginAcitivity extends AppCompatActivity implements
                             // task successful
                             toastMessage("Login successful");
                             saveNewFacebookUser();
-                            startActivity(new Intent(LoginAcitivity.this, MapsActivity.class));
-                            finish();
                         }
                         else
                         {
@@ -271,28 +269,48 @@ public class LoginAcitivity extends AppCompatActivity implements
 
     private void saveNewFacebookUser()
     {
-        User user = new User();
-        FirebaseUser fireUser = firebaseAuth.getInstance().getCurrentUser();
+        final FirebaseUser fireUser = firebaseAuth.getInstance().getCurrentUser();
 
-        /*String providerID = "";
-        String providerName = "";
-        String providerEmail = "";
+        myRootRef.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean tempBoo = false;
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    //toastMessage(ds.getKey());
+                    if (ds.getKey().equals(fireUser.getUid()))
+                    {
+                        //toastMessage("TRUE!!! " + fireUser.getUid() + " " + ds.getKey());
+                        tempBoo = true;
+                    }
+                    else
+                    {
+                        //toastMessage("FALSE!!! " + fireUser.getUid() + " " + ds.getKey());
+                    }
+                }
 
-        for (UserInfo profile : fireUser.getProviderData())
-        {
-            providerID = profile.getProviderId();
-            providerName = profile.getDisplayName();
-            providerEmail = profile.getEmail();
+                if (tempBoo == false)
+                {
+                    //toastMessage("FALSE");
+                    User user = new User();
+                    user.setFullName(fbName);
+                    user.setUserID(fireUser.getUid());
 
-        }*/
-        //toastLong("Profile: " + providerName + " " + providerEmail + " " + providerID);
-        //toastLong("User: " + fireUser.getDisplayName() + " " + fireUser.getEmail() + " " + fireUser.getUid());
+                    myRootRef.child("Users").child(fireUser.getUid()).child("UserInfo").setValue(user);
+                }
+                else
+                {
+                    //toastMessage("TRUE");
+                }
+                startActivity(new Intent(LoginAcitivity.this, MapsActivity.class));
+                finish();
+            }
 
-        user.setFullName(fbName);
-        user.setUserID(fireUser.getUid());
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        myRootRef.child("Users").child(fireUser.getUid()).child("UserInfo").setValue(user);
-
+            }
+        });
     }
 
     @Override

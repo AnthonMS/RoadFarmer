@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICCES" />
 
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,18 +40,23 @@
 
         <activity
             android:name=".ViewActivities.MapsActivity"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewActivities.LoginAcitivity" />
-        <activity android:name=".ViewActivities.RegisterActivity" />
-        <activity android:name=".ViewActivities.CreateLocationActivity" />
-        <activity android:name=".ViewActivities.ChangeLocationActivity" />
-        <activity android:name=".ViewActivities.AccountActivity"></activity>
+        <activity android:name=".ViewActivities.LoginAcitivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewActivities.RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewActivities.CreateLocationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewActivities.ChangeLocationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewActivities.AccountActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

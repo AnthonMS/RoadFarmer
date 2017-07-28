@@ -33,7 +33,7 @@
                     android:scaleType="centerInside"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
-                    android:src="@drawable/uk_flag_icon"/>
+                    android:background="@android:color/darker_gray"/>
 
                 <EditText
                     android:id="@+id/create_editRoad"
@@ -148,8 +148,7 @@
                     android:layout_below="@+id/create_addedItemText"
                     android:layout_alignParentLeft="true"
                     android:layout_marginTop="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/uk_flag_icon"/>
+                    android:layout_marginLeft="20dp"/>
 
                 <ImageView
                     android:id="@+id/create_itemView2"
@@ -159,8 +158,7 @@
                     android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView1"
                     android:layout_marginTop="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/dk_flag_icon"/>
+                    android:layout_marginLeft="20dp"/>
 
                 <ImageView
                     android:id="@+id/create_itemView3"
@@ -170,8 +168,7 @@
                     android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView2"
                     android:layout_marginTop="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/sv_flag_icon"/>
+                    android:layout_marginLeft="20dp"/>
 
                 <ImageView
                     android:id="@+id/create_itemView4"
@@ -181,8 +178,7 @@
                     android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView3"
                     android:layout_marginTop="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/no_flag_icon"/>
+                    android:layout_marginLeft="20dp" />
 
                 <ImageView
                     android:id="@+id/create_itemView5"
@@ -192,8 +188,7 @@
                     android:layout_below="@+id/create_addedItemText"
                     android:layout_toRightOf="@+id/create_itemView4"
                     android:layout_marginTop="0dp"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/nl_flag_icon"/>
+                    android:layout_marginLeft="20dp" />
 
                 <EditText
                     android:id="@+id/create_addCustomItems"

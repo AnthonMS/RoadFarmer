@@ -8,14 +8,18 @@ public class User
 {
     private String fullName, email, phone;
     private String userID;
+    private int numberOfCreatedLocations;
+    private String locationID;
 
     public User() {
+        numberOfCreatedLocations = 0;
     }
 
     public User(String fullName, String email, String phone) {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
+        numberOfCreatedLocations = 0;
     }
 
     public User(String fullName, String email, String phone, String userID) {
@@ -23,6 +27,7 @@ public class User
         this.email = email;
         this.phone = phone;
         this.userID = userID;
+        numberOfCreatedLocations = 0;
     }
 
     public boolean equals(User user)
@@ -51,6 +56,22 @@ public class User
         }
 
         return false;
+    }
+
+    public void setLocationID(String locationID) {
+        this.locationID = locationID;
+    }
+
+    public String getLocationID() {
+        return locationID;
+    }
+
+    public void setNumberOfCreatedLocations(int numberOfCreatedLocations) {
+        this.numberOfCreatedLocations = numberOfCreatedLocations;
+    }
+
+    public int getNumberOfCreatedLocations() {
+        return numberOfCreatedLocations;
     }
 
     public void setUserID(String userID) {

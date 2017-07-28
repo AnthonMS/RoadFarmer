@@ -4,9 +4,15 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,12 +33,18 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 import dk.roadfarmer.roadfarmer.Models.SellingLocation;
@@ -44,6 +56,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
 {
     private DrawerLayout mDrawerLayout;
     private final Context context = this;
+    public static final int REQUEST_CODE_CAMERA = 98;
 
     // Buttons and stuff from app_bar class
     private ImageButton burgerMenuBtn;
@@ -60,6 +73,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRootRef;
+    private StorageReference mStorage;
 
     // Initialize from layout file
     private ImageView locationImgView,
@@ -67,6 +81,9 @@ public class CreateLocationActivity extends AppCompatActivity implements
     private EditText editRoad, editNo, editZip, editCity, editCustomItems, editDescription;
     private Button addImgBtn, getLocBtn, createSellingLocBtn;
     private TextView addItemsText, addedItemTextView;
+    private Bitmap locationViewPhoto;
+    private Uri photoUri;
+    private String photoID;
 
     // Variables used to check which items selected to sell
     private String overallCategory, overallCategory2, overallCategory3, overallCategory4, overallCategory5;
@@ -89,6 +106,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRootRef = mFirebaseDatabase.getReference();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         // Everything here is from app_bar class -----------------
         burgerMenuBtn = (ImageButton) findViewById(R.id.burgerMenuBtn);
@@ -156,8 +174,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
             int iZip = 0;
             int iNo = 0;
             try {
-                iZip = Integer.parseInt(getNo);
-                iNo = Integer.parseInt(getZip);
+                iNo = Integer.parseInt(getNo);
+                iZip = Integer.parseInt(getZip);
             } catch (NumberFormatException e)
             {
                 e.printStackTrace();
@@ -167,6 +185,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
             SellingLocation sellingLocation = new SellingLocation(getRoad, getCity, iNo, iZip, locationID);
             sellingLocation.setDescription(getDesc);
             sellingLocation.setUserID(firebaseAuth.getCurrentUser().getUid());
+            sellingLocation.setPhotoDownloadURL(photoUri.toString());
+            sellingLocation.setPhotoID(photoID);
             sellingLocation.setOverallCategory(overallCategory);
             sellingLocation.setSpecificItem1(specificItem1);
             if (!TextUtils.isEmpty(specificItem2))
@@ -691,6 +711,49 @@ public class CreateLocationActivity extends AppCompatActivity implements
         }
     };
 
+    private void launchCamera()
+    {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            locationViewPhoto = (Bitmap) extras.get("data");
+            locationImgView.setBackgroundColor(Color.TRANSPARENT);
+            locationImgView.setImageBitmap(locationViewPhoto);
+
+            //uploadPicture();
+        }
+    }
+
+    private void uploadPicture() {
+        photoID = myRootRef.push().getKey();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        locationViewPhoto.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] byteData = baos.toByteArray();
+        StorageReference filepath = mStorage.child("Photos").child(photoID);
+
+        UploadTask uploadTask = filepath.putBytes(byteData);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // handle successful uploads
+                photoUri = taskSnapshot.getDownloadUrl();
+                //vtoastMessage(photoUri.toString());
+                // Call createSellingLocation method here. As the downloadURL needs to be handled first!!
+                createSellingLocation();
+            }
+        });
+    }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
     {
@@ -706,14 +769,15 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     break;
                 case R.id.create_addImgBtn:
-                    toastMessage("add image");
+                    launchCamera();
                     break;
                 case R.id.create_getLocBtn:
                     toastMessage("Get location");
                     break;
                 case R.id.create_createLocBtn:
                     //toastMessage("Create selling location");
-                    createSellingLocation();
+                    //createSellingLocation();
+                    uploadPicture(); // And create selling location
                     break;
                 case R.id.create_addSellingItems:
                     if (!TextUtils.isEmpty(specificItem5))
