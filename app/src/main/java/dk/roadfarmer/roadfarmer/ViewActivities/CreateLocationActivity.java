@@ -185,8 +185,11 @@ public class CreateLocationActivity extends AppCompatActivity implements
             SellingLocation sellingLocation = new SellingLocation(getRoad, getCity, iNo, iZip, locationID);
             sellingLocation.setDescription(getDesc);
             sellingLocation.setUserID(firebaseAuth.getCurrentUser().getUid());
-            sellingLocation.setPhotoDownloadURL(photoUri.toString());
-            sellingLocation.setPhotoID(photoID);
+            if (! TextUtils.isEmpty(photoID))
+            {
+                sellingLocation.setPhotoDownloadURL(photoUri.toString());
+                sellingLocation.setPhotoID(photoID);
+            }
             sellingLocation.setOverallCategory(overallCategory);
             sellingLocation.setSpecificItem1(specificItem1);
             if (!TextUtils.isEmpty(specificItem2))
@@ -725,13 +728,13 @@ public class CreateLocationActivity extends AppCompatActivity implements
             locationViewPhoto = (Bitmap) extras.get("data");
             locationImgView.setBackgroundColor(Color.TRANSPARENT);
             locationImgView.setImageBitmap(locationViewPhoto);
+            photoID = myRootRef.push().getKey();
 
             //uploadPicture();
         }
     }
 
     private void uploadPicture() {
-        photoID = myRootRef.push().getKey();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         locationViewPhoto.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteData = baos.toByteArray();
@@ -775,9 +778,17 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     toastMessage("Get location");
                     break;
                 case R.id.create_createLocBtn:
-                    //toastMessage("Create selling location");
-                    //createSellingLocation();
-                    uploadPicture(); // And create selling location
+                    if (!TextUtils.isEmpty(photoID))
+                    {
+                        //toastMessage("String is not empty");
+                        uploadPicture(); // and create selling location
+                    }
+                    else
+                    {
+                        //toastMessage("String is empty");
+                        createSellingLocation();
+                    }
+                    //uploadPicture(); // And create selling location
                     break;
                 case R.id.create_addSellingItems:
                     if (!TextUtils.isEmpty(specificItem5))
