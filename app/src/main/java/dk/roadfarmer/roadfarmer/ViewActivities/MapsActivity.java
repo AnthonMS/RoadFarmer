@@ -296,29 +296,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
-
-        /*Geocoder gCoder = new Geocoder(context, Locale.getDefault());
-        List<Address> addressList = new ArrayList<>();
-        try {
-            addressList = gCoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (int i = 0; i < addressList.size(); i++) {
-            Address address = addressList.get(i);
-            String city = address.getAddressLine(0);
-            toastMessage(city);
-        }*/
+        //toastMessage(getCompleteAddress(lastLocation.getLatitude(), lastLocation.getLongitude()));
 
         // Saving the lat & long in shared preferences, so if the user clicks my location button in CreateLocation- I can access the lat&long so I can make a address from that.
         // I do not know if this will be possible. But I will try.
-        SharedPreferences sharedPref = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        float i1 = (float) lastLocation.getLatitude();
-        float i2 = (float) lastLocation.getLongitude();
-        editor.putFloat("lastLat", i1).apply();
-        editor.putFloat("lastLong", i2).apply();
+        saveLastLocation(lastLocation.getLatitude(), lastLocation.getLongitude());
+
+        //editor.putFloat("lastLat", i1).apply();
+        //editor.putFloat("lastLong", i2).apply();
 
         if (currentLocationMarker != null)
         {
@@ -342,6 +327,57 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // if null = no location value
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
+    }
+
+    private void saveLastLocation(double LAT, double LONG)
+    {
+        List<Address> addresses = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(LAT, LONG, 1);
+        } catch (Exception e)
+        {
+            toastMessage(e.toString());
+        }
+
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getLocality();
+        String zip = addresses.get(0).getPostalCode();
+        toastMessage(address + " " + city + " " + zip);
+
+        SharedPreferences sharedPref = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("lastKnownAddress", address).apply();
+        editor.putString("lastKnownCity", city).apply();
+        editor.putString("lastKnownZip", zip).apply();
+    }
+
+    private String getCompleteAddress(double LATITUDE, double LONGITUDE)
+    {
+        String strAdd = "";
+
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null)
+            {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnAddress = new StringBuilder("");
+
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnAddress.append(returnedAddress.getAddressLine(i)).append(" ");
+                }
+                strAdd = strReturnAddress.toString();
+            }
+            else
+            {
+
+            }
+        } catch (Exception e)
+        {
+            toastMessage(e.toString());
+        }
+        return strAdd;
     }
 
     @Override

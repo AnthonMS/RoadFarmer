@@ -85,6 +85,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
     private Uri photoUri;
     private String photoID;
 
+    private String lastAddress, lastCity, lastZip;
+
     // Variables used to check which items selected to sell
     private String overallCategory, overallCategory2, overallCategory3, overallCategory4, overallCategory5;
     private String specificItem1;
@@ -102,6 +104,11 @@ public class CreateLocationActivity extends AppCompatActivity implements
 
         SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
         chosenLanguage = sharedPref.getString("currentLanguage", "");
+        SharedPreferences sharedPref2 = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
+        lastAddress = sharedPref2.getString("lastKnownAddress", "");
+        lastZip = sharedPref2.getString("lastKnownZip", "");
+        lastCity = sharedPref2.getString("lastKnownCity", "");
+        toastMessage(lastAddress + " " + lastZip + " " + lastCity);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -775,7 +782,14 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     launchCamera();
                     break;
                 case R.id.create_getLocBtn:
-                    toastMessage("Get location");
+                    //toastMessage("Get location");
+                    if (! TextUtils.isEmpty(lastAddress))
+                    {
+                        editRoad.setText(lastAddress);
+                        editZip.setText(lastZip);
+                        editCity.setText(lastCity);
+                        toastMessage("Please move the number to the number field.\nThanks!");
+                    }
                     break;
                 case R.id.create_createLocBtn:
                     if (!TextUtils.isEmpty(photoID))
