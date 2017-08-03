@@ -75,6 +75,8 @@ public class ChangeLocationActivity extends AppCompatActivity implements
     private Bitmap locationViewPhoto;
     private Uri photoUri;
     private String photoID;
+    private String specificItem1, specificItem2, specificItem3, specificItem4, specificItem5;
+    private String overallCat1, overallCat2, overallCat3, overallCat4, overallCat5;
 
     private SellingLocation sellingLocation;
 
@@ -197,23 +199,24 @@ public class ChangeLocationActivity extends AppCompatActivity implements
 
         //toastMessage(sellingLocation.getSpecificItem1());
         setItemView(sellingLocation.getSpecificItem1(), item1ImgView);
+        specificItem1 = sellingLocation.getSpecificItem1();
 
         if (!TextUtils.isEmpty(sellingLocation.getSpecificItem2()))
         {
             setItemView(sellingLocation.getSpecificItem2(), item2ImgView);
-
+            specificItem2 = sellingLocation.getSpecificItem2();
             if (!TextUtils.isEmpty(sellingLocation.getSpecificItem3()))
             {
                 setItemView(sellingLocation.getSpecificItem3(), item3ImgView);
-
+                specificItem3 = sellingLocation.getSpecificItem3();
                 if (!TextUtils.isEmpty(sellingLocation.getSpecificItem4()))
                 {
                     setItemView(sellingLocation.getSpecificItem4(), item4ImgView);
-
+                    specificItem4 = sellingLocation.getSpecificItem4();
                     if (!TextUtils.isEmpty(sellingLocation.getSpecificItem5()))
                     {
                         setItemView(sellingLocation.getSpecificItem5(), item5ImgView);
-
+                        specificItem5 = sellingLocation.getSpecificItem5();
 
                     }
                 }
@@ -221,6 +224,68 @@ public class ChangeLocationActivity extends AppCompatActivity implements
         }
 
         //setItemView("Blueberries", item3ImgView);
+    }
+
+    private void updateFirebase()
+    {
+        String getRoad = editRoad.getText().toString().trim();
+        String getNo = editNo.getText().toString().trim();
+        String getZip = editZip.getText().toString().trim();
+        String getCity = editCity.getText().toString().trim();
+        String getDesc = editDescription.getText().toString().trim();
+        int iZip = 0;
+        int iNo = 0;
+        try {
+            iNo = Integer.parseInt(getNo);
+            iZip = Integer.parseInt(getZip);
+        } catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
+
+        SellingLocation sellingLocation = new SellingLocation(getRoad, getCity, iNo, iZip, locationID);
+        sellingLocation.setDescription(getDesc);
+        sellingLocation.setUserID(firebaseAuth.getCurrentUser().getUid());
+        // Saving under RootSellingLocations
+        myRootRef.child("RootSellingLocations").child(locationID).setValue(sellingLocation);
+        // Saving under OverallSellingLocations/overallCategory
+        myRootRef.child("OverallSellingLocations").child(overallCat1).child(locationID).setValue(sellingLocation);
+        // Saving in the specificSellingLocations/specificItem1
+        myRootRef.child("SpecificSellingLocations").child(specificItem1).child(locationID).setValue(sellingLocation);
+
+        if (!TextUtils.isEmpty(specificItem2))
+        {
+            myRootRef.child("SpecificSellingLocations").child(specificItem2).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(specificItem3))
+        {
+            myRootRef.child("SpecificSellingLocations").child(specificItem3).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(specificItem4))
+        {
+            myRootRef.child("SpecificSellingLocations").child(specificItem4).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(specificItem5))
+        {
+            myRootRef.child("SpecificSellingLocations").child(specificItem5).child(locationID).setValue(sellingLocation);
+        }
+
+        if (!TextUtils.isEmpty(overallCat2))
+        {
+            myRootRef.child("OverallSellingLocations").child(overallCat2).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(overallCat3))
+        {
+            myRootRef.child("OverallSellingLocations").child(overallCat3).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(overallCat4))
+        {
+            myRootRef.child("OverallSellingLocations").child(overallCat4).child(locationID).setValue(sellingLocation);
+        }
+        if (!TextUtils.isEmpty(overallCat5))
+        {
+            myRootRef.child("OverallSellingLocations").child(overallCat5).child(locationID).setValue(sellingLocation);
+        }
     }
 
     private void setItemView(String str, ImageView imgView)
@@ -296,7 +361,8 @@ public class ChangeLocationActivity extends AppCompatActivity implements
                     toastMessage("Wanna delete");
                     break;
                 case R.id.change_createLocBtn:
-                    toastMessage("Wanna change");
+                    //toastMessage("Wanna change");
+                    //updateFirebase();
                     break;
             }
         }
