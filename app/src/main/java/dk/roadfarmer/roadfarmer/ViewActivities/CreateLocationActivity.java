@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.graphics.BitmapCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,13 +40,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
 import dk.roadfarmer.roadfarmer.Models.SellingLocation;
-import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
 public class CreateLocationActivity extends AppCompatActivity implements
@@ -131,7 +125,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
         spinnerLang.setAdapter(adapterLang);
         spinnerLang.setOnItemSelectedListener(languageListener);
         // Setting the title of this specific page.
-        textViewTitleBar.setText(getString(R.string.title_activity_account));
+        textViewTitleBar.setText(getString(R.string.title_activity_create));
         // Setting the selected language in the spinner if user selected on himself
         int pos = adapterLang.getPosition(chosenLanguage);
         spinnerLang.setSelection(pos);

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +29,18 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Locale;
 
+import dk.roadfarmer.roadfarmer.Models.SellingLocation;
+import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
 public class ChangeLocationActivity extends AppCompatActivity implements
@@ -56,6 +66,17 @@ public class ChangeLocationActivity extends AppCompatActivity implements
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRootRef;
     private StorageReference mStorage;
+
+    // Initialize from layout file
+    private ImageView locationImgView,
+            item1ImgView, item2ImgView, item3ImgView, item4ImgView, item5ImgView;
+    private EditText editRoad, editNo, editZip, editCity, editCustomItems, editDescription;
+    private Button editSellingLocBtn, deleteLocBtn;
+    private Bitmap locationViewPhoto;
+    private Uri photoUri;
+    private String photoID;
+
+    private SellingLocation sellingLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +122,161 @@ public class ChangeLocationActivity extends AppCompatActivity implements
         navigationView.setCheckedItem(R.id.nav_change2);
         closeNavBtn = (ImageButton) findViewById(R.id.change_closeNavBar);
         closeNavBtn.setOnClickListener(buttonClickListener);
+
+        // Instantiate all the layout stuff
+        locationImgView = (ImageView) findViewById(R.id.change_imageView);
+        item1ImgView = (ImageView) findViewById(R.id.change_itemView1);
+        item2ImgView = (ImageView) findViewById(R.id.change_itemView2);
+        item3ImgView = (ImageView) findViewById(R.id.change_itemView3);
+        item4ImgView = (ImageView) findViewById(R.id.change_itemView4);
+        item5ImgView = (ImageView) findViewById(R.id.change_itemView5);
+        editRoad = (EditText) findViewById(R.id.change_editRoad);
+        editNo = (EditText) findViewById(R.id.change_editNo);
+        editZip = (EditText) findViewById(R.id.change_editZip);
+        editCity = (EditText) findViewById(R.id.change_editCity);
+        editCustomItems = (EditText) findViewById(R.id.change_addCustomItems);
+        editDescription = (EditText) findViewById(R.id.change_editDescription);
+        editSellingLocBtn = (Button) findViewById(R.id.change_createLocBtn);
+        deleteLocBtn = (Button) findViewById(R.id.change_deleteLocBtn);
+        // Set OnClickListener
+        editSellingLocBtn.setOnClickListener(buttonClickListener);
+        deleteLocBtn.setOnClickListener(buttonClickListener);
+
+        getMyLocationID();
+
+    }
+
+    private String locationID;
+    private void getMyLocationID()
+    {
+        myRootRef.child("Users")
+                .child(firebaseAuth.getCurrentUser().getUid())
+                .child("UserInfo")
+                .child("locationID")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                locationID = dataSnapshot.getValue(String.class);
+                getMySellingLocation();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getMySellingLocation()
+    {
+        myRootRef.child("RootSellingLocations")
+                .child(locationID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        sellingLocation = dataSnapshot.getValue(SellingLocation.class);
+                        //toastMessage(sellingLocation.getLocationID());
+                        updateFields();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void updateFields()
+    {
+        editRoad.setText(sellingLocation.getRoad());
+        editNo.setText(sellingLocation.getNo() + "");
+        editZip.setText(sellingLocation.getZip() + "");
+        editCity.setText(sellingLocation.getCity());
+        editDescription.setText(sellingLocation.getDescription());
+
+        //toastMessage(sellingLocation.getSpecificItem1());
+        setItemView(sellingLocation.getSpecificItem1(), item1ImgView);
+
+        if (!TextUtils.isEmpty(sellingLocation.getSpecificItem2()))
+        {
+            setItemView(sellingLocation.getSpecificItem2(), item2ImgView);
+
+            if (!TextUtils.isEmpty(sellingLocation.getSpecificItem3()))
+            {
+                setItemView(sellingLocation.getSpecificItem3(), item3ImgView);
+
+                if (!TextUtils.isEmpty(sellingLocation.getSpecificItem4()))
+                {
+                    setItemView(sellingLocation.getSpecificItem4(), item4ImgView);
+
+                    if (!TextUtils.isEmpty(sellingLocation.getSpecificItem5()))
+                    {
+                        setItemView(sellingLocation.getSpecificItem5(), item5ImgView);
+
+
+                    }
+                }
+            }
+        }
+
+        //setItemView("Blueberries", item3ImgView);
+    }
+
+    private void setItemView(String str, ImageView imgView)
+    {
+        if (str != "")
+        {
+            // Not empty
+            if (str.matches("Cherries"))
+            {
+                imgView.setImageResource(R.drawable.cherry_one);
+            }
+            else if (str.matches("Blueberries"))
+            {
+                imgView.setImageResource(R.drawable.blueberry);
+            }
+            else if (str.matches("Raspberries"))
+            {
+                imgView.setImageResource(R.drawable.rasp_two);
+            }
+            else if (str.matches("Strawberries"))
+            {
+                imgView.setImageResource(R.drawable.straw_one);
+            }
+            else if (str.matches("Apples"))
+            {
+                imgView.setImageResource(R.drawable.apple_one);
+            }
+            else if (str.matches("Pears"))
+            {
+                imgView.setImageResource(R.drawable.pare_one);
+            }
+            else if (str.matches("Plums"))
+            {
+                imgView.setImageResource(R.drawable.plum_one);
+            }
+            else if (str.matches("Oranges"))
+            {
+                imgView.setImageResource(R.drawable.orange_one);
+            }
+            else if (str.matches("Peas"))
+            {
+                imgView.setImageResource(R.drawable.peas_one);
+            }
+            else if (str.matches("Veggie 2"))
+            {
+
+            }
+            else if (str.matches("Fresh"))
+            {
+                imgView.setImageResource(R.drawable.fresh_one);
+            }
+            else if (str.matches("Frost"))
+            {
+                imgView.setImageResource(R.drawable.frost_one);
+            }
+        }
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener()
@@ -115,6 +291,12 @@ public class ChangeLocationActivity extends AppCompatActivity implements
                     break;
                 case R.id.change_closeNavBar:
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
+                    break;
+                case R.id.change_deleteLocBtn:
+                    toastMessage("Wanna delete");
+                    break;
+                case R.id.change_createLocBtn:
+                    toastMessage("Wanna change");
                     break;
             }
         }
