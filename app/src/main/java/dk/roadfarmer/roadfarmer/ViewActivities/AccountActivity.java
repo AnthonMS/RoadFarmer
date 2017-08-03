@@ -274,8 +274,7 @@ public class AccountActivity extends AppCompatActivity implements
 
         dialog.show();
     }
-
-    // test commit
+    // this is test commit wiht commands
 
     private void showYesNoDialog(String title, String body, final int tempInt, final String newValue)
     {
