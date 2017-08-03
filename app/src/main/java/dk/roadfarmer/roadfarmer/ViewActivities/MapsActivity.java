@@ -1,6 +1,7 @@
 package dk.roadfarmer.roadfarmer.ViewActivities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.media.Image;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -67,6 +70,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import dk.roadfarmer.roadfarmer.Controllers.SortingController;
 import dk.roadfarmer.roadfarmer.Models.User;
 import dk.roadfarmer.roadfarmer.R;
 
@@ -78,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleMap.OnInfoWindowClickListener,
         NavigationView.OnNavigationItemSelectedListener
 {
+    private static final String TAG = "MapsActivity";
     private DrawerLayout mDrawerLayout;
     private final Context context = this;
     private int numberOfCreatedLocations;
@@ -96,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayAdapter<CharSequence> adapterHelp;
     private ArrayAdapter<CharSequence> adapterLang;
     private TextView textViewTitleBar;
+    private ImageButton filterBtn;
     // Close button from NavigationBar
     private ImageButton closeNavBtn;
     private NavigationView navigationView;
@@ -138,6 +144,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User user = dataSnapshot.getValue(User.class);
                     numberOfCreatedLocations = user.getNumberOfCreatedLocations();
+                    SharedPreferences sharedPref = getSharedPreferences("numberOfLocations", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt("numberOfCreatedLocations", numberOfCreatedLocations).apply();
                     //toastMessage(numberOfCreatedLocations + "");
                 }
 
@@ -157,6 +166,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         burgerMenuBtn = (ImageButton) findViewById(R.id.burgerMenuBtn);
         burgerMenuBtn.setOnClickListener(buttonClickListener);
         textViewTitleBar = (TextView) findViewById(R.id.textView_titleBar);
+        filterBtn = (ImageButton) findViewById(R.id.imageBtn_filter);
+        filterBtn.setOnClickListener(buttonClickListener);
+        filterBtn.setImageResource(R.drawable.filter_one);
 
         spinnerHelp = (Spinner) findViewById(R.id.spinner_helpDropDown);
         adapterHelp = ArrayAdapter.createFromResource(this, R.array.listSettingSelection, android.R.layout.simple_spinner_item);
@@ -253,6 +265,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 case R.id.closeNavBar:
                     mDrawerLayout.closeDrawer(Gravity.LEFT);
                     break;
+                case R.id.imageBtn_filter:
+                    //toastMessage("Trying to open filter");
+                    showAddItemDialog("Title");
+                    break;
             }
         }
     };
@@ -296,29 +312,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationChanged(Location location) {
         lastLocation = location;
+        //toastMessage(getCompleteAddress(lastLocation.getLatitude(), lastLocation.getLongitude()));
 
-        /*Geocoder gCoder = new Geocoder(context, Locale.getDefault());
-        List<Address> addressList = new ArrayList<>();
-        try {
-            addressList = gCoder.getFromLocation(lastLocation.getLatitude(), lastLocation.getLongitude(), 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // This method gets the address from latLng and saves it in sharedPrefs for later usage.
+        saveLastLocation(lastLocation.getLatitude(), lastLocation.getLongitude());
 
-        for (int i = 0; i < addressList.size(); i++) {
-            Address address = addressList.get(i);
-            String city = address.getAddressLine(0);
-            toastMessage(city);
-        }*/
-
-        // Saving the lat & long in shared preferences, so if the user clicks my location button in CreateLocation- I can access the lat&long so I can make a address from that.
-        // I do not know if this will be possible. But I will try.
-        SharedPreferences sharedPref = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        float i1 = (float) lastLocation.getLatitude();
-        float i2 = (float) lastLocation.getLongitude();
-        editor.putFloat("lastLat", i1).apply();
-        editor.putFloat("lastLong", i2).apply();
+        //editor.putFloat("lastLat", i1).apply();
+        //editor.putFloat("lastLong", i2).apply();
 
         if (currentLocationMarker != null)
         {
@@ -343,6 +343,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
         }
     }
+
+    private void saveLastLocation(double LAT, double LONG)
+    {
+        List<Address> addresses = new ArrayList<>();
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(LAT, LONG, 1);
+        } catch (Exception e)
+        {
+            Log.d(TAG, "saveLastLocation: " + e.toString());
+            //toastMessage(e.toString());
+        }
+
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getLocality();
+        String zip = addresses.get(0).getPostalCode();
+        //toastMessage(address + " " + city + " " + zip);
+
+        SharedPreferences sharedPref = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("lastKnownAddress", address).apply();
+        editor.putString("lastKnownCity", city).apply();
+        editor.putString("lastKnownZip", zip).apply();
+    }
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -388,6 +413,144 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+    Spinner spinnerOverall;
+    Spinner spinnerSpecific;
+    private void showAddItemDialog(String title)
+    {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.custom_dialog_add_item);
+        dialog.setTitle(title);
+        dialog.setCanceledOnTouchOutside(true);
+
+        // Custom dialog components
+        TextView titleView = (TextView) dialog.findViewById(R.id.dialog_titleView3);
+        titleView.setText(title);
+
+        spinnerOverall = (Spinner) dialog.findViewById(R.id.spinner_chooseOverallCategory);
+        spinnerSpecific = (Spinner) dialog.findViewById(R.id.spinner_chooseSpecificCategory);
+        spinnerOverall.setOnItemSelectedListener(overallListener);
+        //spinnerSpecific.setOnItemSelectedListener(fruitListener);
+
+        Button dialog_okBtn = (Button) dialog.findViewById(R.id.dialog_okBtn);
+        dialog_okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //toastMessage(getChosenCategory());
+
+                idkWhatToCallThis();
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void idkWhatToCallThis()
+    {
+        switch (spinnerOverall.getSelectedItemPosition())
+        {
+            case 1: // Berries
+                //toastMessage("You chose berries");
+                //getSpecificBerries();
+                int i = spinnerSpecific.getSelectedItemPosition();
+                switch (i)
+                {
+                    case 0: // nothing specific
+                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Berries", 0);
+                        break;
+                    case 1: // cherries
+                        sortingController = new SortingController(context, mMap, lastLocation, "Cherries", 1);
+                        break;
+                    case 2: // blue
+                        sortingController = new SortingController(context, mMap, lastLocation, "Blueberries", 1);
+                        break;
+                    case 3: // rasp
+                        sortingController = new SortingController(context, mMap, lastLocation, "Raspberries", 1);
+                        break;
+                    case 4: // straw
+                        sortingController = new SortingController(context, mMap, lastLocation, "Strawberries", 1);
+                        break;
+                    case 5: // other
+                        sortingController = new SortingController(context, mMap, lastLocation, "OtherBerries", 1);
+                        break;
+                }
+                break;
+            case 2: // Fruits
+                //toastMessage("You chose fruits");
+                i = spinnerSpecific.getSelectedItemPosition();
+                switch (i)
+                {
+                    case 0: // nothing specific selected
+                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Fruits", 0);
+                        break;
+                    case 1: // apples
+                        sortingController = new SortingController(context, mMap, lastLocation, "Apples", 1);
+                        break;
+                    case 2: // pears
+                        sortingController = new SortingController(context, mMap, lastLocation, "Pears", 1);
+                        break;
+                    case 3: // plums
+                        sortingController = new SortingController(context, mMap, lastLocation, "Plums", 1);
+                        break;
+                    case 4: // Oranges
+                        sortingController = new SortingController(context, mMap, lastLocation, "Oranges", 1);
+                        break;
+                    case 5: // other
+                        sortingController = new SortingController(context, mMap, lastLocation, "OtherFruits", 1);
+                        break;
+                }
+                break;
+            case 3: // Veggies
+                i = spinnerSpecific.getSelectedItemPosition();
+                switch (i)
+                {
+                    case 0: // nothing specific selected
+                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Vegetables", 0);
+                        break;
+                    case 1: // apples
+                        sortingController = new SortingController(context, mMap, lastLocation, "Peas", 1);
+                        break;
+                    case 2: // pears
+                        sortingController = new SortingController(context, mMap, lastLocation, "Veggie 2", 1);
+                        break;
+                    case 3: // plums
+                        sortingController = new SortingController(context, mMap, lastLocation, "Veggie 3", 1);
+                        break;
+                    case 4: // Oranges
+                        sortingController = new SortingController(context, mMap, lastLocation, "Veggie 4", 1);
+                        break;
+                    case 5: // other
+                        sortingController = new SortingController(context, mMap, lastLocation, "OtherVegetables", 1);
+                        break;
+                }
+                break;
+            case 4: // Meat
+                i = spinnerSpecific.getSelectedItemPosition();
+                switch (i)
+                {
+                    case 0: // nothing specific selected
+                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Meat", 0);
+                        break;
+                    case 1: // apples
+                        sortingController = new SortingController(context, mMap, lastLocation, "Fresh", 1);
+                        break;
+                    case 2: // pears
+                        sortingController = new SortingController(context, mMap, lastLocation, "Frost", 1);
+                        break;
+                    case 3: // plums
+                        sortingController = new SortingController(context, mMap, lastLocation, "OtherMeat", 1);
+                        break;
+                }
+                break;
+            case 5: // other
+                SortingController sortingController = new SortingController(context, mMap, lastLocation, "Other", 0);
+                break;
+        }
+    }
+
+
     @Override
     public void onInfoWindowClick(Marker marker) {
 
@@ -397,6 +560,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker) {
         return false;
     }
+
+    private AdapterView.OnItemSelectedListener overallListener = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            String str = parent.getItemAtPosition(position).toString();
+            switch (position)
+            {
+                case 0:
+                    // Choose one
+                    break;
+                case 1:
+                    // Berries selected
+                    // Setting the drop down menu for the specific spinner
+                    ArrayAdapter adapter = ArrayAdapter.createFromResource(context, R.array.listSpecificBerries, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Berries");
+
+                    break;
+                case 2:
+                    // Fruits selected
+                    ArrayAdapter adapter2 = ArrayAdapter.createFromResource(context, R.array.listSpecificFruits, android.R.layout.simple_spinner_item);
+                    adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter2);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Fruits");
+                    break;
+                case 3:
+                    // Vegetables selected
+                    ArrayAdapter adapter3 = ArrayAdapter.createFromResource(context, R.array.listSpecificVeggies, android.R.layout.simple_spinner_item);
+                    adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter3);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Vegetables");
+                    break;
+                case 4:
+                    // Meat selected
+                    ArrayAdapter adapter4 = ArrayAdapter.createFromResource(context, R.array.listSpecificMeats, android.R.layout.simple_spinner_item);
+                    adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSpecific.setAdapter(adapter4);
+
+                    // Set the overallCategory to the overall item selected
+                    //setOverallCategory("Meat");
+                    break;
+                case 5: // other
+                    //toastMessage("Other selected");
+                    break;
+            }
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    };
 
     private AdapterView.OnItemSelectedListener dropDownListener2 = new AdapterView.OnItemSelectedListener()
     {
@@ -478,6 +700,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 case 1:
                     toastMessage("Hjælp");
                     spinnerHelp.setSelection(0);
+                    SortingController sortingController = new SortingController(context, mMap, lastLocation, "Berries", 0);
                     break;
                 case 2:
                     toastMessage("Indstillinger");

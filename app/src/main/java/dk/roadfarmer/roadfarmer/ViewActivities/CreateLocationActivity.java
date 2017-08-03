@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -85,6 +86,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
     private Uri photoUri;
     private String photoID;
 
+    private String lastAddress, lastCity, lastZip;
+
     // Variables used to check which items selected to sell
     private String overallCategory, overallCategory2, overallCategory3, overallCategory4, overallCategory5;
     private String specificItem1;
@@ -102,6 +105,11 @@ public class CreateLocationActivity extends AppCompatActivity implements
 
         SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
         chosenLanguage = sharedPref.getString("currentLanguage", "");
+        SharedPreferences sharedPref2 = getSharedPreferences("savedLocation", Context.MODE_PRIVATE);
+        lastAddress = sharedPref2.getString("lastKnownAddress", "");
+        lastZip = sharedPref2.getString("lastKnownZip", "");
+        lastCity = sharedPref2.getString("lastKnownCity", "");
+        //toastMessage(lastAddress + " " + lastZip + " " + lastCity);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -185,8 +193,11 @@ public class CreateLocationActivity extends AppCompatActivity implements
             SellingLocation sellingLocation = new SellingLocation(getRoad, getCity, iNo, iZip, locationID);
             sellingLocation.setDescription(getDesc);
             sellingLocation.setUserID(firebaseAuth.getCurrentUser().getUid());
-            sellingLocation.setPhotoDownloadURL(photoUri.toString());
-            sellingLocation.setPhotoID(photoID);
+            if (! TextUtils.isEmpty(photoID))
+            {
+                sellingLocation.setPhotoDownloadURL(photoUri.toString());
+                sellingLocation.setPhotoID(photoID);
+            }
             sellingLocation.setOverallCategory(overallCategory);
             sellingLocation.setSpecificItem1(specificItem1);
             if (!TextUtils.isEmpty(specificItem2))
@@ -226,23 +237,25 @@ public class CreateLocationActivity extends AppCompatActivity implements
             // Saving under OverallSellingLocations/overallCategory
             myRootRef.child("OverallSellingLocations").child(overallCategory).child(locationID).setValue(sellingLocation);
             // Saving in the specificSellingLocations/specificItem1
-            myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem1).child(locationID).setValue(sellingLocation);
+            myRootRef.child("SpecificSellingLocations").child(specificItem1).child(locationID).setValue(sellingLocation);
+
             if (!TextUtils.isEmpty(specificItem2))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem2).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem2).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem3))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem3).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem3).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem4))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem4).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem4).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem5))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem5).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem5).child(locationID).setValue(sellingLocation);
             }
+
             if (!TextUtils.isEmpty(overallCategory2))
             {
                 myRootRef.child("OverallSellingLocations").child(overallCategory2).child(locationID).setValue(sellingLocation);
@@ -402,7 +415,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Strawberries";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherBerries";
                 break;
         }
         return tempString;
@@ -427,7 +440,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Oranges";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherFruits";
                 break;
         }
         return tempString;
@@ -452,7 +465,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Veggie 4";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherVegetables";
                 break;
         }
         return tempString;
@@ -471,7 +484,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Frost";
                 break;
             case 3: // Raspberries
-                tempString = "Other";
+                tempString = "OtherMeat";
                 break;
         }
         return tempString;
@@ -570,7 +583,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 }
                 else if (spinnerOverall.getSelectedItemPosition() == 5) // Other chosen
                 {
-                    //setSpecificItem(getSpecificFruits());
+                    //setSpecificItem("Other");
+                    setOverallCategory();
                 }
                 //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
 
@@ -725,13 +739,13 @@ public class CreateLocationActivity extends AppCompatActivity implements
             locationViewPhoto = (Bitmap) extras.get("data");
             locationImgView.setBackgroundColor(Color.TRANSPARENT);
             locationImgView.setImageBitmap(locationViewPhoto);
+            photoID = myRootRef.push().getKey();
 
             //uploadPicture();
         }
     }
 
     private void uploadPicture() {
-        photoID = myRootRef.push().getKey();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         locationViewPhoto.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] byteData = baos.toByteArray();
@@ -772,12 +786,27 @@ public class CreateLocationActivity extends AppCompatActivity implements
                     launchCamera();
                     break;
                 case R.id.create_getLocBtn:
-                    toastMessage("Get location");
+                    //toastMessage("Get location");
+                    if (! TextUtils.isEmpty(lastAddress))
+                    {
+                        editRoad.setText(lastAddress);
+                        editZip.setText(lastZip);
+                        editCity.setText(lastCity);
+                        toastMessage("Please move the number to the number field.\nThanks!");
+                    }
                     break;
                 case R.id.create_createLocBtn:
-                    //toastMessage("Create selling location");
-                    //createSellingLocation();
-                    uploadPicture(); // And create selling location
+                    if (!TextUtils.isEmpty(photoID))
+                    {
+                        //toastMessage("String is not empty");
+                        uploadPicture(); // and create selling location
+                    }
+                    else
+                    {
+                        //toastMessage("String is empty");
+                        createSellingLocation();
+                    }
+                    //uploadPicture(); // And create selling location
                     break;
                 case R.id.create_addSellingItems:
                     if (!TextUtils.isEmpty(specificItem5))

@@ -55,6 +55,16 @@
             android:entries="@array/listLanguages">
         </android.support.v7.widget.AppCompatSpinner>
 
+        <ImageButton
+            android:id="@+id/imageBtn_filter"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:layout_toLeftOf="@+id/spinner_languageSelect"
+            android:layout_margin="10dp"
+            android:scaleType="centerInside"
+            android:background="@android:color/transparent"
+            />
+
 
     </RelativeLayout>
 
