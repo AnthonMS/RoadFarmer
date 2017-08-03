@@ -47,6 +47,7 @@ public class AccountActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
     private DrawerLayout mDrawerLayout;
+    private int numberOfCreatedLocations;
 
     // Buttons and stuff from app_bar class
     private ImageButton burgerMenuBtn;
@@ -78,6 +79,9 @@ public class AccountActivity extends AppCompatActivity implements
 
         SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
         chosenLanguage = sharedPref.getString("currentLanguage", "");
+        SharedPreferences sharedPref2 = getSharedPreferences("numberOfLocations", Context.MODE_PRIVATE);
+        numberOfCreatedLocations = sharedPref2.getInt("numberOfCreatedLocations", 0);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -209,7 +213,19 @@ public class AccountActivity extends AppCompatActivity implements
                     showCustomDialog("Add phone", 2);
                     break;
                 case R.id.account_txtViewSellingLoc:
-                    toastMessage("Trying to go to ChangeSellingLocation");
+                    if (numberOfCreatedLocations == 0) // no location created on beforehand
+                    {
+                        toastMessage("You do not have one created.\nRedirected to create one");
+                        Intent intent4 = new Intent(AccountActivity.this, CreateLocationActivity.class);
+                        startActivity(intent4);
+                        finish();
+                    }
+                    else if (numberOfCreatedLocations == 1) // Already has one location created.
+                    {
+                        Intent intent4 = new Intent(AccountActivity.this, ChangeLocationActivity.class);
+                        startActivity(intent4);
+                        finish();
+                    }
                     break;
             }
         }
@@ -453,15 +469,32 @@ public class AccountActivity extends AppCompatActivity implements
                 break;
             case R.id.nav_create2:
                 //toastMessage("Trying to create Location");
-                Intent intent2 = new Intent(AccountActivity.this, CreateLocationActivity.class);
-                startActivity(intent2);
-                finish();
+                if (numberOfCreatedLocations == 0) // no location created on beforehand
+                {
+                    Intent intent4 = new Intent(AccountActivity.this, CreateLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
+                else // Already has one location created.
+                {
+                    toastMessage("You already have one created.\nGo under change to see the settings.");
+                }
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");
-                /*Intent intent3 = new Intent(AccountActivity.this, ChangeLocationActivity.class);
-                startActivity(intent3);
-                finish();*/
+                if (numberOfCreatedLocations == 0) // no location created on beforehand
+                {
+                    toastMessage("You do not have one created.\nRedirected to create one");
+                    Intent intent4 = new Intent(AccountActivity.this, CreateLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
+                else // Already has one location created.
+                {
+                    Intent intent4 = new Intent(AccountActivity.this, ChangeLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
                 break;
         }
 

@@ -700,7 +700,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 case 1:
                     toastMessage("Hjælp");
                     spinnerHelp.setSelection(0);
-                    SortingController sortingController = new SortingController(context, mMap, lastLocation, "Berries", 0);
                     break;
                 case 2:
                     toastMessage("Indstillinger");
@@ -790,7 +789,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 break;
             case R.id.nav_change2:
-                toastMessage("Trying to change location");
+                if (numberOfCreatedLocations == 0) // no location created on beforehand
+                {
+                    toastMessage("No location created.\nRedirected to create one.");
+                    Intent intent4 = new Intent(MapsActivity.this, CreateLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
+                else // Already has one location created.
+                {
+                    Intent intent4 = new Intent(MapsActivity.this, ChangeLocationActivity.class);
+                    startActivity(intent4);
+                    finish();
+                }
                 break;
         }
 
