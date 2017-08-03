@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -108,7 +109,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
         lastAddress = sharedPref2.getString("lastKnownAddress", "");
         lastZip = sharedPref2.getString("lastKnownZip", "");
         lastCity = sharedPref2.getString("lastKnownCity", "");
-        toastMessage(lastAddress + " " + lastZip + " " + lastCity);
+        //toastMessage(lastAddress + " " + lastZip + " " + lastCity);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -236,23 +237,25 @@ public class CreateLocationActivity extends AppCompatActivity implements
             // Saving under OverallSellingLocations/overallCategory
             myRootRef.child("OverallSellingLocations").child(overallCategory).child(locationID).setValue(sellingLocation);
             // Saving in the specificSellingLocations/specificItem1
-            myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem1).child(locationID).setValue(sellingLocation);
+            myRootRef.child("SpecificSellingLocations").child(specificItem1).child(locationID).setValue(sellingLocation);
+
             if (!TextUtils.isEmpty(specificItem2))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem2).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem2).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem3))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem3).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem3).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem4))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem4).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem4).child(locationID).setValue(sellingLocation);
             }
             if (!TextUtils.isEmpty(specificItem5))
             {
-                myRootRef.child("SpecificSellingLocations").child(overallCategory).child(specificItem5).child(locationID).setValue(sellingLocation);
+                myRootRef.child("SpecificSellingLocations").child(specificItem5).child(locationID).setValue(sellingLocation);
             }
+
             if (!TextUtils.isEmpty(overallCategory2))
             {
                 myRootRef.child("OverallSellingLocations").child(overallCategory2).child(locationID).setValue(sellingLocation);
@@ -412,7 +415,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Strawberries";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherBerries";
                 break;
         }
         return tempString;
@@ -437,7 +440,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Oranges";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherFruits";
                 break;
         }
         return tempString;
@@ -462,7 +465,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Veggie 4";
                 break;
             case 5: // Other
-                tempString = "Other";
+                tempString = "OtherVegetables";
                 break;
         }
         return tempString;
@@ -481,7 +484,7 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 tempString = "Frost";
                 break;
             case 3: // Raspberries
-                tempString = "Other";
+                tempString = "OtherMeat";
                 break;
         }
         return tempString;
@@ -580,7 +583,8 @@ public class CreateLocationActivity extends AppCompatActivity implements
                 }
                 else if (spinnerOverall.getSelectedItemPosition() == 5) // Other chosen
                 {
-                    //setSpecificItem(getSpecificFruits());
+                    //setSpecificItem("Other");
+                    setOverallCategory();
                 }
                 //toastMessage(specificItem1 + " " + specificItem2 + " " + specificItem3 + " " + specificItem4 + " " + specificItem5);
 
