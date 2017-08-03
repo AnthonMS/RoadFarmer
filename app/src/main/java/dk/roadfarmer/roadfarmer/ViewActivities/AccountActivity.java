@@ -47,7 +47,6 @@ public class AccountActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener
 {
     private DrawerLayout mDrawerLayout;
-    int numberOfCreatedLocations;
 
     // Buttons and stuff from app_bar class
     private ImageButton burgerMenuBtn;
@@ -79,8 +78,6 @@ public class AccountActivity extends AppCompatActivity implements
 
         SharedPreferences sharedPref = getSharedPreferences("selectedLanguage", Context.MODE_PRIVATE);
         chosenLanguage = sharedPref.getString("currentLanguage", "");
-        SharedPreferences sharedPref2 = getSharedPreferences("numberOfLocations", Context.MODE_PRIVATE);
-        numberOfCreatedLocations = sharedPref.getInt("numberOfCreatedLocations", 0);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -454,32 +451,16 @@ public class AccountActivity extends AppCompatActivity implements
                 toastMessage(getString(R.string.toast_accountShowing));
                 break;
             case R.id.nav_create2:
-                if (numberOfCreatedLocations == 0) // no location created on beforehand
-                {
-                    Intent intent4 = new Intent(AccountActivity.this, CreateLocationActivity.class);
-                    startActivity(intent4);
-                    finish();
-                }
-                else // Already has one location created.
-                {
-                    toastMessage("You already have one created.\nGo under change to see the settings.");
-                }
+                //toastMessage("Trying to create Location");
+                Intent intent2 = new Intent(AccountActivity.this, CreateLocationActivity.class);
+                startActivity(intent2);
+                finish();
                 break;
             case R.id.nav_change2:
                 toastMessage("Trying to change location");
-                if (numberOfCreatedLocations == 0) // no location created on beforehand
-                {
-                    toastMessage("You do not have created\nRedirected to create one");
-                    Intent intent4 = new Intent(AccountActivity.this, CreateLocationActivity.class);
-                    startActivity(intent4);
-                    finish();
-                }
-                else if (numberOfCreatedLocations == 1) // Already has one location created.
-                {
-                    Intent intent5 = new Intent(AccountActivity.this, ChangeLocationActivity.class);
-                    startActivity(intent5);
-                    finish();
-                }
+                /*Intent intent3 = new Intent(AccountActivity.this, ChangeLocationActivity.class);
+                startActivity(intent3);
+                finish();*/
                 break;
         }
 
