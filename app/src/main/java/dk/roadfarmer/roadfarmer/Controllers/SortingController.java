@@ -95,10 +95,35 @@ public class SortingController
         }
         else if (whatToShow == 2) // RootSellingLocation
         {
-
+            // This is supposed to just show all the selling locations from root of firebase
+            // has not been made yet.
+            // Should be easy to make
+            addAllMarkers();
         }
 
         //addBerriesMarkers();
+    }
+
+    private void addAllMarkers()
+    {
+        markerMap.clear();
+        mMap.clear();
+
+        myRootRef.child("RootSellingLocations").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    SellingLocation sellingLocation = ds.getValue(SellingLocation.class);
+                    toastMessage(sellingLocation.getLocationID());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void addSpecificMarkers()

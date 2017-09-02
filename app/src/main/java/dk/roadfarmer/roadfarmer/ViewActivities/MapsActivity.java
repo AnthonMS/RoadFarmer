@@ -447,18 +447,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog.show();
     }
 
+    // This method creates a new sortingController and sends what the user selected with that
+    // So when the user select "Berries" & "Other" it will do case 0: and send berries as a parameter
+    // The integer parameter at the end is used for telling the sorting controller what method it needs to call
+    // 0 is overallCategory
+    // 1 is specificItem
+    // 2 is supposed to be to just show all from rootSellingLocations
     private void idkWhatToCallThis()
     {
         switch (spinnerOverall.getSelectedItemPosition())
         {
-            case 1: // Berries
+            case 1: // all
+                SortingController sortingController = new SortingController(context, mMap, lastLocation, "", 2);
+                break;
+            case 2: // Berries
                 //toastMessage("You chose berries");
                 //getSpecificBerries();
                 int i = spinnerSpecific.getSelectedItemPosition();
                 switch (i)
                 {
                     case 0: // nothing specific
-                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Berries", 0);
+                        sortingController = new SortingController(context, mMap, lastLocation, "Berries", 0);
                         break;
                     case 1: // cherries
                         sortingController = new SortingController(context, mMap, lastLocation, "Cherries", 1);
@@ -477,13 +486,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                 }
                 break;
-            case 2: // Fruits
+            case 3: // Fruits
                 //toastMessage("You chose fruits");
                 i = spinnerSpecific.getSelectedItemPosition();
                 switch (i)
                 {
                     case 0: // nothing specific selected
-                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Fruits", 0);
+                        sortingController = new SortingController(context, mMap, lastLocation, "Fruits", 0);
                         break;
                     case 1: // apples
                         sortingController = new SortingController(context, mMap, lastLocation, "Apples", 1);
@@ -502,12 +511,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                 }
                 break;
-            case 3: // Veggies
+            case 4: // Veggies
                 i = spinnerSpecific.getSelectedItemPosition();
                 switch (i)
                 {
                     case 0: // nothing specific selected
-                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Vegetables", 0);
+                        sortingController = new SortingController(context, mMap, lastLocation, "Vegetables", 0);
                         break;
                     case 1: // apples
                         sortingController = new SortingController(context, mMap, lastLocation, "Peas", 1);
@@ -526,12 +535,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                 }
                 break;
-            case 4: // Meat
+            case 5: // Meat
                 i = spinnerSpecific.getSelectedItemPosition();
                 switch (i)
                 {
                     case 0: // nothing specific selected
-                        SortingController sortingController = new SortingController(context, mMap, lastLocation, "Meat", 0);
+                        sortingController = new SortingController(context, mMap, lastLocation, "Meat", 0);
                         break;
                     case 1: // apples
                         sortingController = new SortingController(context, mMap, lastLocation, "Fresh", 1);
@@ -544,8 +553,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         break;
                 }
                 break;
-            case 5: // other
-                SortingController sortingController = new SortingController(context, mMap, lastLocation, "Other", 0);
+            case 6: // other
+                sortingController = new SortingController(context, mMap, lastLocation, "Other", 0);
                 break;
         }
     }
@@ -572,7 +581,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 case 0:
                     // Choose one
                     break;
-                case 1:
+                case 1: // all
+                    break;
+                case 2:
                     // Berries selected
                     // Setting the drop down menu for the specific spinner
                     ArrayAdapter adapter = ArrayAdapter.createFromResource(context, R.array.listSpecificBerries, android.R.layout.simple_spinner_item);
@@ -583,7 +594,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //setOverallCategory("Berries");
 
                     break;
-                case 2:
+                case 3:
                     // Fruits selected
                     ArrayAdapter adapter2 = ArrayAdapter.createFromResource(context, R.array.listSpecificFruits, android.R.layout.simple_spinner_item);
                     adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -592,7 +603,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Fruits");
                     break;
-                case 3:
+                case 4:
                     // Vegetables selected
                     ArrayAdapter adapter3 = ArrayAdapter.createFromResource(context, R.array.listSpecificVeggies, android.R.layout.simple_spinner_item);
                     adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -601,7 +612,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Vegetables");
                     break;
-                case 4:
+                case 5:
                     // Meat selected
                     ArrayAdapter adapter4 = ArrayAdapter.createFromResource(context, R.array.listSpecificMeats, android.R.layout.simple_spinner_item);
                     adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -610,7 +621,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // Set the overallCategory to the overall item selected
                     //setOverallCategory("Meat");
                     break;
-                case 5: // other
+                case 6: // other
                     //toastMessage("Other selected");
                     break;
             }

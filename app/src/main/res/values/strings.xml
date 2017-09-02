@@ -86,6 +86,7 @@
 
     <string-array name="listOverallCategory">
         <item>Choose one</item>
+        <item>All</item>
         <item>Berries</item>
         <item>Fruits</item>
         <item>Vegetables</item>

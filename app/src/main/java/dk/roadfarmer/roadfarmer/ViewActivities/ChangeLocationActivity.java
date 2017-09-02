@@ -161,6 +161,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements
             {
                 locationID = dataSnapshot.getValue(String.class);
                 getMySellingLocation();
+                toastMessage(locationID);
             }
 
             @Override
@@ -180,6 +181,7 @@ public class ChangeLocationActivity extends AppCompatActivity implements
                         sellingLocation = dataSnapshot.getValue(SellingLocation.class);
                         //toastMessage(sellingLocation.getLocationID());
                         updateFields();
+                        //toastMessage("2: " + sellingLocation.getLocationID());
                     }
 
                     @Override
@@ -217,7 +219,6 @@ public class ChangeLocationActivity extends AppCompatActivity implements
                     {
                         setItemView(sellingLocation.getSpecificItem5(), item5ImgView);
                         specificItem5 = sellingLocation.getSpecificItem5();
-
                     }
                 }
             }
